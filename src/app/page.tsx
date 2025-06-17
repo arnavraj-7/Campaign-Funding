@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ArrowDown, Zap, Shield, Clock, TrendingUp, Users, Coins, BookOpen } from "lucide-react";
 import "./globals.css";
@@ -37,7 +37,7 @@ const Index = () => {
               🚀 Powered by Blockchain Technology
             </Badge>
             
-            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold text-white mb-6 bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
+            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold mb-6 bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
               Ignite Your Dreams
             </h1>
             
@@ -184,7 +184,7 @@ const Index = () => {
               <div className="bg-slate-800/30 p-6 rounded-xl border border-slate-700">
                 <h3 className="text-2xl font-bold text-white mb-4">Why Ethereum?</h3>
                 <p className="text-slate-300 leading-relaxed">
-                  Ethereum's smart contract capabilities enable programmable money, allowing for complex funding rules, automatic refunds, and transparent fund management without intermediaries.
+                  Ethereum&apos;s smart contract capabilities enable programmable money, allowing for complex funding rules, automatic refunds, and transparent fund management without intermediaries.
                 </p>
               </div>
               
@@ -194,7 +194,7 @@ const Index = () => {
                   <li>• Lower fees compared to traditional platforms</li>
                   <li>• Global reach without geographic restrictions</li>
                   <li>• Transparent fund tracking and management</li>
-                  <li>• Automated refunds if goals aren't met</li>
+                  <li>• Automated refunds if goals aren&apos;t met</li>
                 </ul>
               </div>
             </div>
