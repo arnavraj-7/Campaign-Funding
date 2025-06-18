@@ -2,19 +2,21 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Menu, X, Zap } from "lucide-react";
+import { useContractStore } from "@/stores/contractsStore";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { connectWallet } = useContractStore();
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
   const navItems = [
-    { name: "Home", href: "#" },
-    { name: "Features", href: "#features" },
-    { name: "Education", href: "#education" },
-    { name: "About", href: "#about" },
+    { name: "Home", href: "/" },
+    { name: "Features", href: "/#features" },
+    { name: "Education", href: "/#education" },
+    { name: "About", href: "/#about" },
     { name: "Contact", href: "#contact" },
   ];
 
@@ -44,7 +46,9 @@ const Navbar = () => {
             <Button 
               size="sm"
               className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold"
+              onClick={connectWallet}
             >
+              
               Connect Wallet
             </Button>
           </div>
