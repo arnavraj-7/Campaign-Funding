@@ -1,4 +1,4 @@
-export const CONTRACT_ABI = [
+export const CONTRACT_ABI =  [
     {
       "anonymous": false,
       "inputs": [
@@ -89,6 +89,11 @@ export const CONTRACT_ABI = [
           "type": "string"
         },
         {
+          "internalType": "string",
+          "name": "metadata",
+          "type": "string"
+        },
+        {
           "internalType": "uint256",
           "name": "target",
           "type": "uint256"
@@ -122,6 +127,11 @@ export const CONTRACT_ABI = [
         {
           "internalType": "string",
           "name": "title",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "metadata",
           "type": "string"
         },
         {
@@ -167,6 +177,11 @@ export const CONTRACT_ABI = [
             {
               "internalType": "string",
               "name": "title",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "metadata",
               "type": "string"
             },
             {
@@ -365,4 +380,4 @@ export const CONTRACT_ABI = [
       "type": "function"
     }
   ]
-export const CONTRACT_ADDRESS = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
+export const CONTRACT_ADDRESS = "0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6";
