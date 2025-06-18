@@ -4,6 +4,16 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { 
+  Dialog, 
+  DialogContent, 
+  DialogDescription, 
+  DialogHeader, 
+  DialogTitle, 
+  DialogTrigger 
+} from "@/components/ui/dialog";
 import { 
   Calendar, 
   Target, 
@@ -13,66 +23,35 @@ import {
   DollarSign,
   ArrowLeft,
   Heart,
-  Share2
+  Share2,
+  Plus,
+  Eye,
+  Wallet
 } from "lucide-react";
-import  Link  from "next/link";
 import { useContractStore } from "@/stores/contractsStore";
+import type { campaign } from "@/types/index.ts";
 
-// Mock type - replace with your actual type
-interface Campaign {
-  id: string;
-  title: string;
-  description?: string;
-  target: string;
-  donated: string;
-  deadline: string;
-  owner?: string;
-  category?: string;
-}
-
-// Mock store
-// const useContractStore = () => ({
-//   getAllCampaigns: async (): Promise<Campaign[]> => {
-//     // Mock data
-//     return [
-//       {
-//         id: "1",
-//         title: "Revolutionary AI Assistant for Students",
-//         description: "Building an AI-powered learning companion that helps students understand complex topics through personalized explanations.",
-//         target: "50",
-//         donated: "32.5",
-//         deadline: "2024-08-15T18:00:00",
-//         owner: "0x1234...5678",
-//         category: "Technology"
-//       },
-//       {
-//         id: "2", 
-//         title: "Sustainable Urban Farming Initiative",
-//         description: "Creating vertical farms in urban areas to provide fresh, local produce while reducing environmental impact.",
-//         target: "25",
-//         donated: "18.7",
-//         deadline: "2024-07-30T12:00:00",
-//         owner: "0xabcd...efgh",
-//         category: "Environment"
-//       },
-//       {
-//         id: "3",
-//         title: "Open Source Education Platform",
-//         description: "Developing a free, accessible education platform for underserved communities worldwide.",
-//         target: "75",
-//         donated: "12.3",
-//         deadline: "2024-09-01T23:59:59",
-//         owner: "0x9876...4321",
-//         category: "Education"
-//       }
-//     ];
-//   }
-// });
+const tagIcons: Record<string, string> = {
+  'Technology': '💻',
+  'Environment': '🌱',
+  'Education': '📚',
+  'Health': '🏥',
+  'Art': '🎨',
+  'Arts & Culture': '🎨',
+  'Startups / Business': '🚀',
+  'Child Welfare': '👶',
+  'Disaster Relief / Emergency': '🆘',
+  'Scientific Research': '🔬',
+  'Women Empowerment / Social Justice': '⚖️',
+};
 
 const Campaigns = () => {
-  const { getAllCampaigns,contract } = useContractStore();
-  const [campaigns, setCampaigns] = useState<Campaign[]>([]);
+  const { getAllCampaigns, isConnected, connectWallet } = useContractStore();
+  const [campaigns, setCampaigns] = useState<campaign[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedCampaign, setSelectedCampaign] = useState<campaign | null>(null);
+  const [donationAmount, setDonationAmount] = useState('');
+  const [likedCampaigns, setLikedCampaigns] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     const fetchCampaigns = async () => {
@@ -104,22 +83,44 @@ const Campaigns = () => {
     return Math.min((parseFloat(donated) / parseFloat(target)) * 100, 100);
   };
   
-  const getCategoryColor = (category?: string) => {
+  const gettagColor = (tag?: string) => {
     const colors: Record<string, string> = {
       Technology: "bg-blue-500/20 text-blue-400 border-blue-500/30",
       Environment: "bg-green-500/20 text-green-400 border-green-500/30",
       Education: "bg-purple-500/20 text-purple-400 border-purple-500/30",
       Health: "bg-red-500/20 text-red-400 border-red-500/30",
-      Art: "bg-pink-500/20 text-pink-400 border-pink-500/30",
+      'Arts & Culture': "bg-pink-500/20 text-pink-400 border-pink-500/30",
+      'Startups / Business': "bg-yellow-500/20 text-yellow-400 border-yellow-500/30",
     };
-    return colors[category || ""] || "bg-gray-500/20 text-gray-400 border-gray-500/30";
+    return colors[tag || ""] || "bg-gray-500/20 text-gray-400 border-gray-500/30";
+  };
+
+  const toggleLike = (campaignId: string) => {
+    const newLiked = new Set(likedCampaigns);
+    if (newLiked.has(campaignId)) {
+      newLiked.delete(campaignId);
+    } else {
+      newLiked.add(campaignId);
+    }
+    setLikedCampaigns(newLiked);
+  };
+
+  const handleDonate = () => {
+    if (!isConnected) {
+      connectWallet();
+      return;
+    }
+    // Handle donation logic here
+    console.log(`Donating ${donationAmount} ETH to campaign ${selectedCampaign?.id}`);
+    setDonationAmount('');
+    setSelectedCampaign(null);
   };
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center">
         <div className="text-center">
-          <div className="w-16 h-16 border-4 border-blue-500/30 border-t-blue-500 rounded-full animate-spin mx-auto mb-4"></div>
+          <div className="w-16 h-16 border-4 border-purple-500/30 border-t-purple-500 rounded-full animate-spin mx-auto mb-4"></div>
           <p className="text-white text-lg">Loading campaigns...</p>
         </div>
       </div>
@@ -127,37 +128,58 @@ const Campaigns = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+      {/* Animated Background */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse"></div>
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-blue-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse delay-1000"></div>
+      </div>
+
       {/* Header */}
-      <div className="relative overflow-hidden bg-gradient-to-r from-blue-600/10 to-purple-600/10 border-b border-white/10">
+      <div className="relative overflow-hidden bg-gradient-to-r from-purple-600/10 to-blue-600/10 border-b border-white/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          <div className="flex items-center gap-4 mb-6">
-            <Link href="/">
-              <Button variant="ghost" size="sm" className="text-gray-400 hover:text-white">
-                <ArrowLeft className="w-4 h-4 mr-2" />
-                Back to Home
-              </Button>
-            </Link>
+          <div className="flex items-center justify-between mb-6">
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              onClick={() => window.location.href = '/'}
+              className="text-slate-400 hover:text-white"
+            >
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Back to Home
+            </Button>
+            
+            <Button 
+              onClick={() => window.location.href = '/create-campaign'}
+              className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white"
+            >
+              <Plus className="w-4 h-4 mr-2" />
+              Create Campaign
+            </Button>
           </div>
           
           <div className="text-center">
-            <h1 className="text-4xl md:text-6xl font-bol mb-4 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+            <h1 className="text-4xl md:text-6xl font-bold text-white mb-4 bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text">
               Active Campaigns
             </h1>
-            <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
+            <p className="text-xl text-slate-300 mb-8 max-w-2xl mx-auto">
               Discover innovative projects and help bring them to life
             </p>
             
             <div className="flex flex-wrap justify-center gap-6 text-sm">
-              <div className="flex items-center gap-2 text-gray-400">
+              <div className="flex items-center gap-2 text-slate-400">
                 <TrendingUp className="w-4 h-4" />
                 <span>{campaigns.length} Active Projects</span>
               </div>
-              <div className="flex items-center gap-2 text-gray-400">
+              <div className="flex items-center gap-2 text-slate-400">
                 <DollarSign className="w-4 h-4" />
                 <span>
                   {campaigns.reduce((acc, campaign) => acc + parseFloat(campaign.donated), 0).toFixed(1)} ETH Raised
                 </span>
+              </div>
+              <div className="flex items-center gap-2 text-slate-400">
+                <Users className="w-4 h-4" />
+                <span>{campaigns.length * Math.floor(Math.random() * 20 + 10)} Backers</span>
               </div>
             </div>
           </div>
@@ -167,16 +189,17 @@ const Campaigns = () => {
       {/* Campaigns Grid */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         {campaigns.length === 0 ? (
-          <Card className="bg-white/5 backdrop-blur-sm border-white/10 max-w-md mx-auto">
+          <Card className="bg-slate-800/50 backdrop-blur-sm border-slate-700 max-w-md mx-auto">
             <CardContent className="p-12 text-center">
-              <Target className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+              <Target className="w-16 h-16 text-slate-400 mx-auto mb-4" />
               <h3 className="text-xl font-semibold text-white mb-2">No Campaigns Yet</h3>
-              <p className="text-gray-400 mb-6">Be the first to create a campaign and start raising funds!</p>
-              <Link to="/">
-                <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white">
-                  Create Campaign
-                </Button>
-              </Link>
+              <p className="text-slate-400 mb-6">Be the first to create a campaign and start raising funds!</p>
+              <Button 
+                onClick={() => window.location.href = '/create-campaign'}
+                className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white"
+              >
+                Create Campaign
+              </Button>
             </CardContent>
           </Card>
         ) : (
@@ -184,58 +207,77 @@ const Campaigns = () => {
             {campaigns.map((campaign) => {
               const progress = getProgressPercentage(campaign.donated, campaign.target);
               const isEnded = new Date(campaign.deadline) < new Date();
+              const isLiked = likedCampaigns.has(campaign.id);
+              
               
               return (
                 <Card 
                   key={campaign.id} 
-                  className="bg-white/5 backdrop-blur-sm border-white/10 hover:border-white/20 transition-all duration-300 transform hover:scale-[1.02] hover:shadow-2xl group"
+                  className="bg-slate-800/50 backdrop-blur-sm border-slate-700 hover:border-slate-600 transition-all duration-300 transform hover:scale-[1.02] hover:shadow-2xl group overflow-hidden"
                 >
-                  <CardHeader className="pb-4">
-                    <div className="flex items-start justify-between mb-3">
-                      {campaign.category && (
-                        <Badge className={`${getCategoryColor(campaign.category)} font-medium`}>
-                          {campaign.category}
+                  {/* Mock Campaign Image */}
+                  <div className="relative h-48 bg-gradient-to-br from-purple-500/20 to-blue-500/20 overflow-hidden">
+                    <img src={campaign.metadata.imageUrl} alt={campaign.title} className="absolute h-full w-full object-cover inset-0 bg-gradient-to-t from-slate-900/60 to-transparent" />
+                    <div className="absolute top-4 left-4">
+                      {campaign.tag && (
+                        <Badge className={`${gettagColor(campaign.tag)} font-medium border backdrop-blur-sm`}>
+                          <span className="mr-1">{tagIcons[campaign.tag] || '📁'}</span>
+                          {campaign.tag}
                         </Badge>
                       )}
-                      <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <Button size="sm" variant="ghost" className="text-gray-400 hover:text-red-400 p-2">
-                          <Heart className="w-4 h-4" />
-                        </Button>
-                        <Button size="sm" variant="ghost" className="text-gray-400 hover:text-blue-400 p-2">
-                          <Share2 className="w-4 h-4" />
-                        </Button>
+                    </div>
+                    <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <Button 
+                        size="sm" 
+                        variant="ghost" 
+                        onClick={() => toggleLike(campaign.id)}
+                        className={`backdrop-blur-sm border ${isLiked ? 'text-red-400 bg-red-500/20' : 'text-white bg-black/20'} hover:scale-110 transition-transform`}
+                      >
+                        <Heart className={`w-4 h-4 ${isLiked ? 'fill-current' : ''}`} />
+                      </Button>
+                      <Button 
+                        size="sm" 
+                        variant="ghost" 
+                        className="text-white bg-black/20 backdrop-blur-sm border hover:scale-110 transition-transform"
+                      >
+                        <Share2 className="w-4 h-4" />
+                      </Button>
+                    </div>
+                    <div className="absolute bottom-4 left-4 right-4">
+                      <div className="text-white font-bold text-lg mb-1 line-clamp-2">
+                        {campaign.title}
+                      </div>
+                      <div className="text-slate-300 text-sm">
+                        by {campaign.owner}
                       </div>
                     </div>
-                    
-                    <CardTitle className="text-white text-xl line-clamp-2 mb-2">
-                      {campaign.title}
-                    </CardTitle>
-                    
+                  </div>
+
+                  <CardContent className="p-6 space-y-4">
+                    {/* Description */}
                     {campaign.description && (
-                      <CardDescription className="text-gray-400 line-clamp-3">
+                      <p className="text-slate-400 text-sm line-clamp-3">
                         {campaign.description}
-                      </CardDescription>
+                      </p>
                     )}
-                  </CardHeader>
-                  
-                  <CardContent className="space-y-6">
+
                     {/* Progress */}
                     <div className="space-y-3">
                       <div className="flex justify-between items-center">
                         <span className="text-2xl font-bold text-white">
                           {campaign.donated} ETH
                         </span>
-                        <span className="text-gray-400">
+                        <span className="text-slate-400">
                           of {campaign.target} ETH
                         </span>
                       </div>
                       
                       <Progress 
                         value={progress} 
-                        className="h-2 bg-gray-800"
+                        className="h-2 bg-slate-700"
                       />
                       
-                      <div className="flex justify-between text-sm text-gray-400">
+                      <div className="flex justify-between text-sm text-slate-400">
                         <span>{progress.toFixed(1)}% funded</span>
                         <span>{Math.floor(Math.random() * 50 + 10)} backers</span>
                       </div>
@@ -243,33 +285,81 @@ const Campaigns = () => {
 
                     {/* Timeline */}
                     <div className="flex items-center gap-2 text-sm">
-                      <Clock className="w-4 h-4 text-gray-400" />
+                      <Clock className="w-4 h-4 text-slate-400" />
                       <span className={`font-medium ${isEnded ? 'text-red-400' : 'text-blue-400'}`}>
                         {formatDeadline(campaign.deadline)}
                       </span>
                     </div>
 
-                    {/* Owner */}
-                    {campaign.owner && (
-                      <div className="flex items-center gap-2 text-sm text-gray-400">
-                        <Users className="w-4 h-4" />
-                        <span className="font-mono">
-                          {campaign.owner}
-                        </span>
-                      </div>
-                    )}
+                    {/* Metadata */}
+                    <div className="text-xs text-slate-500 font-mono">
+                      IPFS: {campaign.metadata.slice(0, 20)}...
+                    </div>
 
-                    {/* Action Button */}
-                    <Button 
-                      className={`w-full py-6 text-lg rounded-xl transition-all duration-300 ${
-                        isEnded 
-                          ? 'bg-gray-600 hover:bg-gray-700 text-gray-300' 
-                          : 'bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 text-white transform hover:scale-[1.02]'
-                      }`}
-                      disabled={isEnded}
-                    >
-                      {isEnded ? 'Campaign Ended' : 'Support This Project'}
-                    </Button>
+                    {/* Action Buttons */}
+                    <div className="flex gap-2 pt-2">
+                      <Dialog>
+                        <DialogTrigger asChild>
+                          <Button 
+                            className={`flex-1 py-6 text-lg rounded-xl transition-all duration-300 ${
+                              isEnded 
+                                ? 'bg-slate-600 hover:bg-slate-700 text-slate-300' 
+                                : 'bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 text-white transform hover:scale-[1.02]'
+                            }`}
+                            disabled={isEnded}
+                            onClick={() => setSelectedCampaign(campaign)}
+                          >
+                            {isEnded ? 'Campaign Ended' : 'Support Project'}
+                          </Button>
+                        </DialogTrigger>
+                        <DialogContent className="bg-slate-800 border-slate-700 text-white">
+                          <DialogHeader>
+                            <DialogTitle>Support {campaign.title}</DialogTitle>
+                            <DialogDescription className="text-slate-300">
+                              Help bring this project to life with your contribution
+                            </DialogDescription>
+                          </DialogHeader>
+                          <div className="space-y-4 pt-4">
+                            <div className="space-y-2">
+                              <Label htmlFor="amount">Donation Amount (ETH)</Label>
+                              <Input
+                                id="amount"
+                                type="number"
+                                step="0.01"
+                                placeholder="0.1"
+                                value={donationAmount}
+                                onChange={(e) => setDonationAmount(e.target.value)}
+                                className="bg-slate-700 border-slate-600 text-white"
+                              />
+                            </div>
+                            <div className="flex gap-2">
+                              <Button
+                                onClick={handleDonate}
+                                className="flex-1 bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700"
+                                disabled={!donationAmount}
+                              >
+                                {!isConnected ? (
+                                  <>
+                                    <Wallet className="w-4 h-4 mr-2" />
+                                    Connect & Donate
+                                  </>
+                                ) : (
+                                  `Donate ${donationAmount || '0'} ETH`
+                                )}
+                              </Button>
+                            </div>
+                          </div>
+                        </DialogContent>
+                      </Dialog>
+                      
+                      <Button 
+                        variant="outline"
+                        size="icon"
+                        className="border-slate-600 text-slate-400 hover:text-white hover:border-slate-500"
+                      >
+                        <Eye className="w-4 h-4" />
+                      </Button>
+                    </div>
                   </CardContent>
                 </Card>
               );
