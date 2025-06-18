@@ -31,6 +31,7 @@ import Link from "next/link";
 import { all } from "axios";
 import toast from "react-hot-toast";
 import { ethers } from "ethers";
+import { useRouter } from "next/navigation";
 
 const tagIcons: Record<string, string> = {
   Technology: "💻",
@@ -47,9 +48,9 @@ const tagIcons: Record<string, string> = {
 };
 
 const Campaigns = () => {
-  const { getAllCampaigns, isConnected, connectWallet, donate, allCampaigns,contract } =
+  const router = useRouter();
+  const { getAllCampaigns, isConnected, connectWallet, donate, allCampaigns,contract,isfetching } =
     useContractStore();
-  const [loading, setLoading] = useState(false);
   const [selectedCampaign, setSelectedCampaign] = useState<campaign | null>(
     null
   );
@@ -66,7 +67,6 @@ const Campaigns = () => {
     const fetchCampaigns = async () => {
       if(!isConnected) return
       try {
-        setLoading(true);
         await getAllCampaigns();
         console.log("allCampaigns", allCampaigns);
         if (allCampaigns) {
@@ -74,7 +74,6 @@ const Campaigns = () => {
       } catch (error) {
         console.error("Error fetching campaigns:", error);
       } finally {
-        setLoading(false);
       }
     };
     fetchCampaigns();
@@ -122,7 +121,7 @@ const Campaigns = () => {
     setSelectedCampaign(null);
   };
 
-  if (loading) {
+  if (isfetching) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center">
         <div className="text-center">
@@ -132,10 +131,6 @@ const Campaigns = () => {
       </div>
     );
   }
-  if(allCampaigns===null){
-    return;
-  }
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 font-inter">
       {/* Animated Background */}
@@ -151,7 +146,7 @@ const Campaigns = () => {
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => (window.location.href = "/")}
+              onClick={() =>router.push("/")}
               className="text-slate-400 hover:text-white"
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
@@ -159,7 +154,7 @@ const Campaigns = () => {
             </Button>
 
             <Button
-              onClick={() => (window.location.href = "/create-campaign")}
+              onClick={() =>router.push("/create-campaign")}
               className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white"
             >
               <Plus className="w-4 h-4 mr-2" />

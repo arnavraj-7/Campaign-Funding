@@ -10,6 +10,7 @@ type contractStore = {
   isLoading: boolean;
   isConnected: boolean;
   account: Address | null;
+  isfetching:boolean;
   allCampaigns: ProcessedCampaign[] | null;
   setIsLoading: (isLoading: boolean) => void;
   setIsConnected: (isConnected: boolean) => void;
@@ -34,6 +35,7 @@ export const useContractStore = create<contractStore>((set, get) => ({
   isConnected: false,
   account: null,
   allCampaigns : null,
+  isfetching:true,
   setIsLoading: (isLoading: boolean) => {
     set({ isLoading: isLoading });
   },
@@ -201,7 +203,7 @@ export const useContractStore = create<contractStore>((set, get) => ({
   getCampaign: async (id: string | number) => {
     const { contract, setIsLoading } = get();
     try {
-      setIsLoading(true);
+      set({isfetching:true})
 
       if (!contract) {
         throw new Error("Contract not connected");
@@ -235,7 +237,8 @@ export const useContractStore = create<contractStore>((set, get) => ({
       console.error("Get campaign error:", error);
       throw error;
     } finally {
-      setIsLoading(false);
+            set({isfetching:false})
+
     }
   },
   getAllCampaigns: async () => {
@@ -243,7 +246,8 @@ export const useContractStore = create<contractStore>((set, get) => ({
     const { contract, setIsLoading } = get();
 
     try {
-      setIsLoading(true);
+            set({isfetching:true})
+
 
       if (!contract) {
         throw new Error("Contract not connected");
@@ -298,7 +302,8 @@ export const useContractStore = create<contractStore>((set, get) => ({
       console.error("Get all campaigns error:", err);
       throw err;
     } finally {
-      setIsLoading(false);
+            set({isfetching:false})
+
     }
   },
 }));
