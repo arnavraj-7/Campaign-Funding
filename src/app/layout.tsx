@@ -4,6 +4,7 @@ import Footer from "@/components/footer"
 import "./globals.css";
 import { useContractStore } from "@/stores/contractsStore";
 import { useEffect } from "react";
+import {Toaster} from "react-hot-toast"
 
 export default function RootLayout({
   children,
@@ -31,7 +32,7 @@ const {isConnected, connectWallet} = useContractStore();
         <Navbar/>
         {children}
         <Footer/>
-
+<Toaster/>
         </body>
     </html>
   )
