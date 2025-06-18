@@ -120,6 +120,7 @@ contract CrowdFunding {
             allCampaigns[i] = Campaign({
                 owner: campaign.owner,
                 title: campaign.title,
+                metadata: campaign.metadata,
                 target: campaign.target,
                 deadline: campaign.deadline,
                 amountCollected: campaign.amountCollected,
