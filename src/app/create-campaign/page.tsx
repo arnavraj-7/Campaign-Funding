@@ -8,6 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Wallet, Plus, ArrowLeft } from "lucide-react";
 import { useContractStore } from '@/stores/contractsStore';
 import Link from "next/link"
+import { uploadToIPFS } from '@/utils/nftuploader';
 // import { useToast } from "@/hooks/use-toast";
 
 
@@ -15,9 +16,11 @@ import Link from "next/link"
 const CreateCampaign = () => {
   //   const { toast } = useToast();
   const{connectWallet, createCampaign, isConnected, isLoading, account} = useContractStore();
+  const [Image,setImage] =useState<File>();
   const [formData, setFormData] = useState({
     title: '',
     description: '',
+    tag:'',
     target: '',
     deadline: ''
   });
@@ -27,12 +30,14 @@ const CreateCampaign = () => {
     if (!account) return;
     
     try {
-     await createCampaign(account,formData.title,formData.target, formData.deadline);
+      const metadata = await uploadToIPFS(Image,formData.title, formData.tag, formData.description);
+      const { metadataUrl } = metadata;
+     await createCampaign(account,formData.title,metadataUrl,formData.target, formData.deadline);
     //   toast({
     //     title: "Campaign Created!",
     //     description: `${formData.title} has been successfully created.`,
     //   });
-      setFormData({ title: '', description: '', target: '', deadline: '' });
+      setFormData({ title: '', description: '',tag:'', target: '', deadline: '' });
     } catch (error) {
     //   toast({
     //     variant: "destructive",
@@ -172,6 +177,12 @@ view all
                       onChange={(e) => setFormData({...formData, deadline: e.target.value})}
                       required
                     />
+                  </div>
+                  <div>
+                     <input type="file" accept="image/*" onChange={e => e.target.files && setImage(e.target.files[0])} />
+                  </div>
+                  <div>
+                    <input type="text" onChange={e=> setFormData({...formData, tag: e.target.value})} />
                   </div>
 
                   <Button

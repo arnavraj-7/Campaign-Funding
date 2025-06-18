@@ -7,6 +7,7 @@ contract CrowdFunding {
     struct Campaign {
         address owner;
         string title;
+        string metadata;
         uint256 target;
         uint256 deadline;
         uint256 amountCollected;
@@ -36,6 +37,7 @@ contract CrowdFunding {
     function createCampaign(
         address owner,
         string memory title,
+        string memory metadata,
         uint256 target,
         uint256 deadline
     ) public {
@@ -49,6 +51,7 @@ contract CrowdFunding {
         campaign.owner = owner;
         campaign.title = title;
         campaign.target = target;
+        campaign.metadata = metadata;
         campaign.deadline = deadline;
         campaign.amountCollected = 0;
         campaign.exists = true;

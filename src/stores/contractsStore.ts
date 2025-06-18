@@ -16,6 +16,7 @@ type contractStore = {
   createCampaign: (
     owner: string,
     title: string,
+    metadata: string,
     target: string,
     deadline: string
   ) => Promise<void>;
@@ -112,6 +113,7 @@ export const useContractStore = create<contractStore>((set, get) => ({
   createCampaign: async (
     owner: string,
     title: string,
+    metadata:string,
     target: string,
     deadline: string
   ) => {
@@ -142,6 +144,7 @@ export const useContractStore = create<contractStore>((set, get) => ({
       const tx = await contract.createCampaign(
         owner,
         title,
+        metadata,
         targetAmount,
         deadlineTimestamp
       );
