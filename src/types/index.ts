@@ -1,2 +1,18 @@
 
-export type campaign = { owner: string; title: string; target: number; deadline: number;donated?: number; };
+export type campaign = { owner: string; title: string; target: number; deadline: number;donated?: number; 
+    amountCollected: number; metadata: string; exists: boolean; };
+
+export type ProcessedCampaign = {
+    id: number;
+    owner: string;
+    title: string;
+    target: string;
+    deadlineDate: Date;
+    amountCollected: string;
+    targetEth: string;
+    description:string;
+    tag:string;
+    imageUrl:string;
+    metadata: string;
+
+}
