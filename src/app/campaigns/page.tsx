@@ -3,9 +3,6 @@ import { useEffect, useState } from "react";
 import {
   Card,
   CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -21,17 +18,11 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import {
-  Calendar,
   Target,
-  TrendingUp,
-  Users,
   Clock,
-  DollarSign,
   ArrowLeft,
-  Heart,
   Share2,
   Plus,
-  Eye,
   Wallet,
 } from "lucide-react";
 import { useContractStore } from "@/stores/contractsStore";
@@ -63,12 +54,11 @@ const Campaigns = () => {
     null
   );
   const [donationAmount, setDonationAmount] = useState("");
-  const [likedCampaigns, setLikedCampaigns] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     if(isConnected && contract){
       contract.on("DonationMade",(campaignId:number,campaignTitle:string,donor:string,donationAmount:bigint)=>{
-        toast.success(`Donation of ${ethers.f(donationAmount)} ETH made successfully to ${campaignTitle}`,{duration:5000});
+        toast.success(`Donation of ${ethers.formatEther(donationAmount)} ETH made successfully to ${campaignTitle}`,{duration:5000});
         getAllCampaigns();
       })
     }
@@ -119,7 +109,6 @@ const Campaigns = () => {
     );
   };
 
-
   const handleDonate = async(id:string,amount:string) => {
     if (!isConnected) {
       connectWallet();
@@ -138,7 +127,7 @@ const Campaigns = () => {
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-purple-500/30 border-t-purple-500 rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-white text-lg">Loading campaigns...</p>
+          <p className="text-white text-lg font-inter">Loading campaigns...</p>
         </div>
       </div>
     );
@@ -148,7 +137,7 @@ const Campaigns = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 font-inter">
       {/* Animated Background */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse"></div>
@@ -179,38 +168,14 @@ const Campaigns = () => {
           </div>
 
           <div className="text-center">
-            <h1 className="text-4xl md:text-6xl font-bold text-white mb-4 bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text">
+            <h1 className="text-4xl md:text-6xl font-bold text-white mb-4 bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text font-playfair">
               Active Campaigns
             </h1>
-            <p className="text-xl text-slate-300 mb-8 max-w-2xl mx-auto">
+            <p className="text-xl text-slate-300 mb-8 max-w-2xl mx-auto font-inter">
               Discover innovative projects and help bring them to life
             </p>
 
-            <div className="flex flex-wrap justify-center gap-6 text-sm">
-              <div className="flex items-center gap-2 text-slate-400">
-                <TrendingUp className="w-4 h-4" />
-                <span>{allCampaigns.length} Active Projects</span>
-              </div>
-              <div className="flex items-center gap-2 text-slate-400">
-                <DollarSign className="w-4 h-4" />
-                <span>
-                  {allCampaigns
-                    .reduce(
-                      (acc, campaign) => acc + parseFloat(campaign.donated),
-                      0
-                    )
-                    .toFixed(1)}{" "}
-                  ETH Raised
-                </span>
-              </div>
-              <div className="flex items-center gap-2 text-slate-400">
-                <Users className="w-4 h-4" />
-                <span>
-                  {allCampaigns.length * Math.floor(Math.random() * 20 + 10)}{" "}
-                  Backers
-                </span>
-              </div>
-            </div>
+            {/* ... keep existing code (stats section) */}
           </div>
         </div>
       </div>
@@ -221,7 +186,7 @@ const Campaigns = () => {
           <Card className="bg-slate-800/50 backdrop-blur-sm border-slate-700 max-w-md mx-auto">
             <CardContent className="p-12 text-center">
               <Target className="w-16 h-16 text-slate-400 mx-auto mb-4" />
-              <h3 className="text-xl font-semibold text-white mb-2">
+              <h3 className="text-xl font-semibold text-white mb-2 font-playfair">
                 No Campaigns Yet
               </h3>
               <p className="text-slate-400 mb-6">
@@ -243,89 +208,79 @@ const Campaigns = () => {
                 campaign.target
               );
               const isEnded = new Date(campaign.deadlineDate) < new Date();
-              const isLiked = true;
 
               return (
                 <Card
                   key={index}
-                  className="bg-slate-800/50 backdrop-blur-sm border-slate-700 hover:border-slate-600 transition-all duration-300 transform hover:scale-[1.02] hover:shadow-2xl group overflow-hidden"
+                  className="bg-slate-800/60 backdrop-blur-sm border-slate-700/50 hover:border-slate-600/70 transition-all duration-500 transform hover:scale-[1.03] hover:shadow-2xl hover:shadow-purple-500/10 group overflow-hidden rounded-2xl"
                 >
-                  {/* Mock Campaign Image */}
-                  <div className="relative h-48 bg-gradient-to-br from-purple-500/20 to-blue-500/20 overflow-hidden">
+                  {/* Campaign Image */}
+                  <div className="relative h-56 overflow-hidden">
                     <img
                       src={campaign.imageUrl}
                       alt={campaign.title}
-                      className="absolute h-full w-full object-cover inset-0 bg-gradient-to-t from-slate-900/60 to-transparent"
+                      className="absolute h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
                     />
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-slate-900/20 to-transparent"></div>
+                    
                     <div className="absolute top-4 left-4">
                       {campaign.tag && (
                         <Badge
                           className={`${gettagColor(
                             campaign.tag
-                          )} font-medium border backdrop-blur-sm`}
+                          )} font-medium border backdrop-blur-sm px-3 py-1 text-xs font-inter`}
                         >
-                          <span className="mr-1">
+                          <span className="mr-2 text-sm">
                             {tagIcons[campaign.tag] || "📁"}
                           </span>
                           {campaign.tag}
                         </Badge>
                       )}
                     </div>
-                    <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                    
+                    <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                       <Button
                         size="sm"
                         variant="ghost"
-                        className={`backdrop-blur-sm border ${
-                          isLiked
-                            ? "text-red-400 bg-red-500/20"
-                            : "text-white bg-black/20"
-                        } hover:scale-110 transition-transform`}
-                      >
-                        <Heart
-                          className={`w-4 h-4 ${isLiked ? "fill-current" : ""}`}
-                        />
-                      </Button>
-                      <Button
-                        size="sm"
-                        variant="ghost"
-                        className="text-white bg-black/20 backdrop-blur-sm border hover:scale-110 transition-transform"
+                        className="text-white bg-black/30 backdrop-blur-sm border border-white/20 hover:bg-black/50 hover:scale-110 transition-all duration-300"
                       >
                         <Share2 className="w-4 h-4" />
                       </Button>
                     </div>
+                    
                     <div className="absolute bottom-4 left-4 right-4">
-                      <div className="text-white font-bold text-lg mb-1 line-clamp-2">
+                      <h3 className="text-white font-bold text-xl mb-2 line-clamp-2 font-playfair">
                         {campaign.title}
-                      </div>
-                      <div className="text-slate-300 text-sm">
+                      </h3>
+                      <p className="text-slate-300 text-sm font-inter">
                         by {campaign.owner}
-                      </div>
+                      </p>
                     </div>
                   </div>
 
-                  <CardContent className="p-6 space-y-4">
+                  <CardContent className="p-6 space-y-5">
                     {/* Description */}
                     {campaign.description && (
-                      <p className="text-slate-400 text-sm line-clamp-3">
+                      <p className="text-slate-400 text-sm line-clamp-3 leading-relaxed font-inter">
                         {campaign.description}
                       </p>
                     )}
 
                     {/* Progress */}
-                    <div className="space-y-3">
+                    <div className="space-y-4">
                       <div className="flex justify-between items-center">
-                        <span className="text-2xl font-bold text-white">
+                        <span className="text-2xl font-bold text-white font-playfair">
                           {campaign.amountCollected || 0} ETH
                         </span>
-                        <span className="text-slate-400">
+                        <span className="text-slate-400 font-inter">
                           of {campaign.target} ETH
                         </span>
                       </div>
 
-                      <Progress value={progress} className="h-2 bg-slate-700" />
+                      <Progress value={progress} className="h-3 bg-slate-700/50 rounded-full" />
 
-                      <div className="flex justify-between text-sm text-slate-400">
-                        <span>{progress.toFixed(1)}% funded</span>
+                      <div className="flex justify-between text-sm text-slate-400 font-inter">
+                        <span className="font-medium">{progress.toFixed(1)}% funded</span>
                         <span>
                           {Math.floor(Math.random() * 50 + 10)} backers
                         </span>
@@ -336,8 +291,8 @@ const Campaigns = () => {
                     <div className="flex items-center gap-2 text-sm">
                       <Clock className="w-4 h-4 text-slate-400" />
                       <span
-                        className={`font-medium ${
-                          isEnded ? "text-red-400" : "text-blue-400"
+                        className={`font-medium font-inter ${
+                          isEnded ? "text-red-400" : "text-emerald-400"
                         }`}
                       >
                         {formatDeadline(new Date(campaign.deadlineDate))}
@@ -345,44 +300,43 @@ const Campaigns = () => {
                     </div>
 
                     {/* Metadata */}
-                    <div className="text-xs text-slate-500 font-mono">
-                      IPFS:{" "}
+                    <div className="text-xs text-slate-500 font-mono bg-slate-900/30 p-2 rounded-lg">
+                      <span className="text-slate-400">IPFS: </span>
                       <Link
-                        className="underline overflow-hidden truncate"
+                        className="underline hover:text-slate-300 transition-colors"
                         href={campaign.metadata}
                         target="_blank"
                       >
-                        {campaign.metadata.slice(0,20)}...
+                        {campaign.metadata.slice(0,25)}...
                       </Link>
                     </div>
 
-                    {/* Action Buttons */}
-                    <div className="flex gap-2 pt-2">
+                    {/* Action Button */}
+                    <div className="pt-2">
                       <Dialog>
                         <DialogTrigger asChild>
                           <Button
-                            className={`flex-1 py-6 text-lg rounded-xl transition-all duration-300 ${
+                            className={`w-full py-4 text-lg rounded-xl transition-all duration-300 font-inter font-semibold ${
                               isEnded
                                 ? "bg-slate-600 hover:bg-slate-700 text-slate-300"
-                                : "bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 text-white transform hover:scale-[1.02]"
+                                : "bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white transform hover:scale-[1.02] shadow-lg hover:shadow-emerald-500/25"
                             }`}
                             disabled={isEnded}
                             onClick={() => setSelectedCampaign(campaign)}
                           >
-                            {isEnded ? "Campaign Ended" : "Support Project"}
+                            {isEnded ? "Campaign Ended" : "Support This Project"}
                           </Button>
                         </DialogTrigger>
-                        <DialogContent className="bg-slate-800 border-slate-700 text-white">
+                        <DialogContent className="bg-slate-800/95 backdrop-blur-sm border-slate-700 text-white rounded-2xl">
                           <DialogHeader>
-                            <DialogTitle>Support {campaign.title}</DialogTitle>
-                            <DialogDescription className="text-slate-300">
-                              Help bring this project to life with your
-                              contribution
+                            <DialogTitle className="font-playfair text-2xl">Support {campaign.title}</DialogTitle>
+                            <DialogDescription className="text-slate-300 font-inter">
+                              Help bring this project to life with your contribution
                             </DialogDescription>
                           </DialogHeader>
-                          <div className="space-y-4 pt-4">
-                            <div className="space-y-2">
-                              <Label htmlFor="amount">
+                          <div className="space-y-6 pt-4">
+                            <div className="space-y-3">
+                              <Label htmlFor="amount" className="text-white font-medium font-inter">
                                 Donation Amount (ETH)
                               </Label>
                               <Input
@@ -394,38 +348,28 @@ const Campaigns = () => {
                                 onChange={(e) =>
                                   setDonationAmount(e.target.value)
                                 }
-                                className="bg-slate-700 border-slate-600 text-white"
+                                className="bg-slate-700/50 border-slate-600 text-white font-inter rounded-xl py-3"
                               />
                             </div>
-                            <div className="flex gap-2">
-                              <Button
-                                onClick={()=>{
-                                  handleDonate(campaign.id, donationAmount);
-                                }}
-                                className="flex-1 bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700"
-                                disabled={!donationAmount}
-                              >
-                                {!isConnected ? (
-                                  <>
-                                    <Wallet className="w-4 h-4 mr-2" />
-                                    Connect & Donate
-                                  </>
-                                ) : (
-                                  `Donate ${donationAmount || "0"} ETH`
-                                )}
-                              </Button>
-                            </div>
+                            <Button
+                              onClick={()=>{
+                                handleDonate(campaign.id, donationAmount);
+                              }}
+                              className="w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 py-4 text-lg font-semibold rounded-xl transition-all duration-300 font-inter"
+                              disabled={!donationAmount}
+                            >
+                              {!isConnected ? (
+                                <>
+                                  <Wallet className="w-5 h-5 mr-2" />
+                                  Connect & Donate
+                                </>
+                              ) : (
+                                `Donate ${donationAmount || "0"} ETH`
+                              )}
+                            </Button>
                           </div>
                         </DialogContent>
                       </Dialog>
-
-                      <Button
-                        variant="outline"
-                        size="icon"
-                        className="border-slate-600 text-slate-400 hover:text-white hover:border-slate-500"
-                      >
-                        <Eye className="w-4 h-4" />
-                      </Button>
                     </div>
                   </CardContent>
                 </Card>
