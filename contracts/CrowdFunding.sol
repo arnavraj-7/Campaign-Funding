@@ -31,7 +31,7 @@ contract CrowdFunding {
 
     // Events
     event CampaignCreated(uint256 indexed id, address owner, string title);
-    event DonationMade(uint256 indexed campaignId, address donor, uint256 amount);
+    event DonationMade(uint256 indexed campaignId, string title, address donor, uint256 amount);
 
     // Create a new campaign
     function createCampaign(
@@ -86,8 +86,8 @@ contract CrowdFunding {
         }
         currentUser.totalAmountDonated += msg.value;
         userDonations[msg.sender][campaignId] += msg.value;
-
-        emit DonationMade(campaignId, msg.sender, msg.value);
+        string memory campaign_title = currentCampaign.title;
+        emit DonationMade(campaignId,campaign_title, msg.sender, msg.value);
     }
 
     // Get campaign details safely
