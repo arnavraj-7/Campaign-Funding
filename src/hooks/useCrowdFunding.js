@@ -76,7 +76,7 @@ export const useContract = () => {
 
       await tx.wait();
       console.log("Campaign created!");
-      return tx;
+      return ;
     } catch (error) {
       console.error("Error:", error);
       throw error;
@@ -85,18 +85,29 @@ export const useContract = () => {
     }
   };
 
-  const donateToCampaign = async (campaignId, amount) => {
+  const donate = async(amount)=>{
+    try{
+      setIsLoading(true);
+      if(contract){
+        const tx = await contract.donate(ethers.parseEther(String(amount)));
+        await tx.wait();
+
+      }else{
+        throw new Error("Contract not connected");
+      }
+    }catch(err){
+      console.log(err.message);
+
+    }finally{
+      setIsLoading(false);
+    }
+  }
+
+  const getCampaign = async (id) => {
     try {
       setIsLoading(true);
-      const amountInWei = ethers.parseEther(amount.toString());
-
-      const tx = await contract.donate(campaignId, {
-        value: amountInWei,
-      });
-
-      await tx.wait();
-      console.log("Donation successful!");
-      return tx;
+      const campaign = await contract.campaigns(id);
+      return campaign;
     } catch (error) {
       console.error("Error:", error);
       throw error;
@@ -104,75 +115,18 @@ export const useContract = () => {
       setIsLoading(false);
     }
   };
-
-  const getCampaignCount = async () => {
-    try {
-      if (!contract) {
-        throw new Error("Contract not initialized");
-      }
-      
-      const count = await contract.numberOfCampaigns();
-      console.log("Campaign count:", count.toString());
-      return Number(count);
-    } catch (error) {
-      console.error("Error fetching numberOfCampaigns:", error);
-      throw error;
+  const getAllCampaigns = async ()=>{
+    try{
+      setIsLoading(true);
+      const allCampaigns = await contract.getAllCampaigns();
+      return allCampaigns;
+    }catch(err){
+      console.error("Error:", err);
+      throw err;
+    }finally{
+      setIsLoading(false);
     }
-  };
-
-  const getCampaign = async (campaignId) => {
-    try {
-      if (!contract) {
-        throw new Error("Contract not initialized");
-      }
-
-      // First check if campaign exists by getting count
-      const totalCampaigns = await getCampaignCount();
-      if (campaignId >= totalCampaigns) {
-        throw new Error(`Campaign ${campaignId} does not exist. Total campaigns: ${totalCampaigns}`);
-      }
-
-      const campaignData = await contract.getCampaign(campaignId);
-      
-      return {
-        owner: campaignData[0],
-        title: campaignData[1],
-        target: ethers.formatEther(campaignData[2]),
-        deadline: new Date(Number(campaignData[3]) * 1000).toLocaleString(),
-        amountCollected: ethers.formatEther(campaignData[4]),
-        campaignId: campaignId
-      };
-    } catch (error) {
-      console.error("Error fetching campaign:", error);
-      throw error;
-    }
-  };
-
-  const getAllCampaigns = async () => {
-    try {
-      if (!contract) {
-        throw new Error("Contract not initialized");
-      }
-
-      const totalCampaigns = await getCampaignCount();
-      const campaigns = [];
-
-      for (let i = 0; i < totalCampaigns; i++) {
-        try {
-          const campaign = await getCampaign(i);
-          campaigns.push(campaign);
-        } catch (error) {
-          console.error(`Error fetching campaign ${i}:`, error);
-        }
-      }
-
-      return campaigns;
-    } catch (error) {
-      console.error("Error fetching all campaigns:", error);
-      throw error;
-    }
-  };
-
+  }
   return {
     account,
     contract,
@@ -180,9 +134,8 @@ export const useContract = () => {
     isLoading,
     connectWallet,
     createCampaign,
-    donateToCampaign,
+    donate,
     getCampaign,
-    getCampaignCount,
-    getAllCampaigns,
+    getAllCampaigns
   };
 };
