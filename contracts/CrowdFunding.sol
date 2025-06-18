@@ -1,68 +1,73 @@
-//SPDX-License-Identifier: UNLICENSED
+// SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.0;
 
 contract CrowdFunding {
 
-    //CAMPAIGNS
+    // CAMPAIGNS
     struct Campaign {
         address owner;
         string title;
-        string metadataURI; // IPFS CID
         uint256 target;
         uint256 deadline;
         uint256 amountCollected;
-        mapping(address => uint256) donations;
+        bool exists; // ✅ For safe checks
     }
 
     uint256 public numberOfCampaigns = 0;
-    mapping(bytes32 => Campaign) public campaigns;
+    mapping(uint256 => Campaign) public campaigns;
 
-    //USERS
+    // USERS
     struct user {
         address id;
-        bytes32[] campaigns;
+        uint256[] campaigns;
         uint256 totalamountDonated;
-        mapping(bytes32 => uint256) donations;
+        mapping(uint256 => uint256) donations;
     }
 
     mapping(address => user) public users;
     uint256 public numberOfUsers = 0;
 
+    // Events
+    event CampaignCreated(uint256 indexed id, address owner, string title);
+
+    // Create a new campaign
     function createCampaign(
         address owner,
         string memory title,
-        string memory metadataURI,
         uint256 target,
         uint256 deadline
     ) public {
-        require(deadline > block.timestamp, "The deadline should be a date in the future");
+        require(deadline > block.timestamp, "Deadline should be in the future");
 
+        uint256 campaignId = numberOfCampaigns;
         numberOfCampaigns++;
-        bytes32 campaignId = keccak256(abi.encodePacked(msg.sender, block.timestamp, title));
 
         Campaign storage campaign = campaigns[campaignId];
         campaign.owner = owner;
         campaign.title = title;
-        campaign.metadataURI = metadataURI;
         campaign.target = target;
         campaign.deadline = deadline;
+        campaign.exists = true; // ✅ important
 
-        // Add campaignId to user's campaigns list
+        // Add campaign to user's list
         user storage campaignCreator = users[msg.sender];
         if (campaignCreator.id == address(0)) {
             campaignCreator.id = msg.sender;
             numberOfUsers++;
         }
         campaignCreator.campaigns.push(campaignId);
+
+        emit CampaignCreated(campaignId, msg.sender, title);
     }
 
-    function donate(bytes32 campaign) public payable {
-        require(msg.value > 0, "Amount should be greater than 0");
-        require(campaigns[campaign].deadline > block.timestamp, "Campaign expired");
+    // Donate to a campaign
+    function donate(uint256 campaignId) public payable {
+        require(msg.value > 0, "Amount must be greater than 0");
+        require(campaigns[campaignId].exists, "Campaign doesn't exist");
+        require(campaigns[campaignId].deadline > block.timestamp, "Campaign expired");
 
-        Campaign storage currentCampaign = campaigns[campaign];
+        Campaign storage currentCampaign = campaigns[campaignId];
         currentCampaign.amountCollected += msg.value;
-        currentCampaign.donations[msg.sender] += msg.value;
 
         user storage currentUser = users[msg.sender];
         if (currentUser.id == address(0)) {
@@ -70,6 +75,25 @@ contract CrowdFunding {
             numberOfUsers++;
         }
         currentUser.totalamountDonated += msg.value;
-        currentUser.donations[campaign] += msg.value;
+        currentUser.donations[campaignId] += msg.value;
+    }
+
+    // Get campaign details safely
+    function getCampaign(uint256 campaignId) public view returns (
+        address owner,
+        string memory title,
+        uint256 target,
+        uint256 deadline,
+        uint256 amountCollected
+    ) {
+        require(campaigns[campaignId].exists, "Campaign does not exist");
+        Campaign storage c = campaigns[campaignId];
+        return (
+            c.owner,
+            c.title,
+            c.target,
+            c.deadline,
+            c.amountCollected
+        );
     }
 }

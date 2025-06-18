@@ -6,7 +6,14 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "compile": "hardhat compile",
+    "node": "hardhat node",
+    "deploy:localhost": "hardhat ignition deploy ./ignition/modules/CrowdFunding.js --network localhost && node scripts/generate-abi.js",
+    "deploy:sepolia": "hardhat ignition deploy ./ignition/modules/CrowdFunding.js --network sepolia && node scripts/generate-abi.js",
+    "generate-abi": "node scripts/generate-abi.js",
+    "test": "hardhat test",
+    "clean": "hardhat clean"
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.2.3",
