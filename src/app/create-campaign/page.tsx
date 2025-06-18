@@ -134,7 +134,7 @@ const CreateCampaign = () => {
           </div>
           
           <div className="text-center mb-12">
-            <h1 className="text-4xl md:text-6xl font-bold text-white mb-4 bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
+            <h1 className="text-4xl md:text-6xl font-bold text-white mb-4 bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text">
               Launch Your Campaign
             </h1>
             <p className="text-slate-300 text-lg">Turn your innovative ideas into funded reality</p>

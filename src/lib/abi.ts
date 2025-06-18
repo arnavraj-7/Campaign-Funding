@@ -1,4 +1,4 @@
-export const CONTRACT_ABI =  [
+export const CONTRACT_ABI = [
     {
       "anonymous": false,
       "inputs": [
@@ -32,6 +32,12 @@ export const CONTRACT_ABI =  [
           "internalType": "uint256",
           "name": "campaignId",
           "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "string",
+          "name": "title",
+          "type": "string"
         },
         {
           "indexed": false,
@@ -380,4 +386,4 @@ export const CONTRACT_ABI =  [
       "type": "function"
     }
   ]
-export const CONTRACT_ADDRESS = "0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6";
+export const CONTRACT_ADDRESS = "0x9A676e781A523b5d0C0e43731313A708CB607508";
