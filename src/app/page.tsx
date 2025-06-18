@@ -72,6 +72,7 @@ const Index = () => {
             </div>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <Link href="/create-campaign">
               <Button 
                 size="lg" 
                 className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-8 py-3 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
@@ -79,7 +80,9 @@ const Index = () => {
                 Start Your Campaign
                 <Zap className="ml-2 h-5 w-5" />
               </Button>
+              </Link>
               
+              <Link href="/campaigns">
               <Button 
                 variant="outline" 
                 size="lg"
@@ -88,6 +91,7 @@ const Index = () => {
                 Explore Campaigns
                 <ArrowDown className="ml-2 h-5 w-5" />
               </Button>
+              </Link>   
             </div>
           </div>
         </div>
