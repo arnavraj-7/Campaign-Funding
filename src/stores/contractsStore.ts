@@ -263,6 +263,7 @@ export const useContractStore = create<contractStore>((set, get) => ({
         deadline: campaign.deadline.toString(), // Convert BigInt to string
         amountCollected: campaign.amountCollected.toString(), // Convert BigInt to string
         exists: campaign.exists,
+        metadata: campaign.metadata,
         // Add formatted versions for display
         targetEth: ethers.formatEther(campaign.target),
         amountCollectedEth: ethers.formatEther(campaign.amountCollected),
