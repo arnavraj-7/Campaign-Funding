@@ -3,8 +3,17 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ArrowDown, Zap, Shield, Clock, TrendingUp, Users, Coins, BookOpen } from "lucide-react";
-import "./globals.css";
+import { ArrowDown, Zap, Shield, Clock, TrendingUp, Users, Coins, BookOpen, } from "lucide-react";
+import Link from "next/link";
+
+// Mock store - replace with your actual store
+const useContractStore = () => ({
+  connectWallet: async () => console.log('Connecting wallet...'),
+  isConnected: false,
+  isLoading: false,
+  account: null as string | null,
+  contract: null
+});
 
 const Index = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -19,6 +28,12 @@ const Index = () => {
       element.scrollIntoView({ behavior: 'smooth' });
     }
   };
+
+  const stats = [
+    { icon: TrendingUp, label: "Total Raised", value: "$2.4M", color: "text-green-400" },
+    { icon: Users, label: "Active Campaigns", value: "156", color: "text-blue-400" },
+    { icon: Shield, label: "Success Rate", value: "78%", color: "text-purple-400" },
+  ];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
@@ -37,30 +52,40 @@ const Index = () => {
               🚀 Powered by Blockchain Technology
             </Badge>
             
-            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold mb-6 bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
+            <h1 className="text-4xl sm:text-6xl pb-4 lg:text-7xl font-bold mb-6 bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
               Ignite Your Dreams
             </h1>
             
             <p className="text-xl sm:text-2xl text-slate-300 mb-8 max-w-3xl mx-auto leading-relaxed">
               Revolutionary crowdfunding platform built on Ethereum. Create campaigns, raise funds, and bring your innovative ideas to life with complete transparency and security.
             </p>
+
+            {/* Stats Section */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12 max-w-4xl mx-auto">
+              {stats.map((stat, index) => (
+                <div key={index} className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10">
+                  <stat.icon className={`w-8 h-8 ${stat.color} mx-auto mb-3`} />
+                  <div className="text-2xl font-bold text-white mb-1">{stat.value}</div>
+                  <div className="text-gray-400 text-sm">{stat.label}</div>
+                </div>
+              ))}
+            </div>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <Button 
                 size="lg" 
                 className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-8 py-3 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
               >
-                Get Started
+                Start Your Campaign
                 <Zap className="ml-2 h-5 w-5" />
               </Button>
               
               <Button 
                 variant="outline" 
                 size="lg"
-                onClick={() => scrollToSection('features')}
                 className="border-slate-600 bg-slate-800/50 text-slate-200 hover:bg-slate-700/70 hover:text-white hover:border-slate-500 px-8 py-3 text-lg font-semibold rounded-xl transition-all duration-300 hover:scale-105"
               >
-                Learn More
+                Explore Campaigns
                 <ArrowDown className="ml-2 h-5 w-5" />
               </Button>
             </div>
@@ -250,13 +275,16 @@ const Index = () => {
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link href="/create-campaign">
             <Button 
               size="lg" 
               className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-8 py-3 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
             >
               Start Your Campaign
             </Button>
+            </Link>
             
+            <Link href="/campaigns"> 
             <Button 
               variant="outline" 
               size="lg"
@@ -264,6 +292,7 @@ const Index = () => {
             >
               View Examples
             </Button>
+            </Link>
           </div>
         </div>
       </section>
