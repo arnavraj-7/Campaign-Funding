@@ -25,8 +25,9 @@ type contractStore = {
     deadline: string
   ) => Promise<void>;
   donate: (campaignId: number, amount: string) => Promise<void>;
-  getCampaign: (id: string | number) => Promise<any>;
-  getAllCampaigns: () => Promise<any>;
+  getCampaign: (id: string | number) => Promise<ProcessedCampaign>;
+  getAllCampaigns: () => Promise<void>;
+  sortCampaigns:()=>Promise<void>
 };
 
 export const useContractStore = create<contractStore>((set, get) => ({
@@ -201,7 +202,7 @@ export const useContractStore = create<contractStore>((set, get) => ({
     }
   },
   getCampaign: async (id: string | number) => {
-    const { contract, setIsLoading } = get();
+    const { contract } = get();
     try {
       set({isfetching:true})
 
@@ -218,32 +219,43 @@ export const useContractStore = create<contractStore>((set, get) => ({
         throw new Error(`Campaign ${campaignId} does not exist`);
       }
 
-      const campaign = await contract.getCampaign(campaignId);
+      const campaign :campaign = await contract.getCampaign(campaignId);
       console.log("Campaign data received");
-
-      return {
-        id: campaignId,
-        owner: campaign[0],
-        title: campaign[1],
-        target: campaign[2].toString(), // Convert BigInt to string
-        deadline: campaign[3].toString(), // Convert BigInt to string
-        amountCollected: campaign[4].toString(), // Convert BigInt to string
-        // Add formatted versions for display
-        targetEth: ethers.formatEther(campaign[2]),
-        amountCollectedEth: ethers.formatEther(campaign[4]),
-        deadlineDate: new Date(Number(campaign[3]) * 1000).toLocaleDateString(),
-      };
-    } catch (error) {
-      console.error("Get campaign error:", error);
-      throw error;
-    } finally {
-            set({isfetching:false})
-
-    }
-  },
+          const deadline = campaign.deadline.toString();
+          const metadata = campaign.metadata;
+          const target = campaign.target.toString(); // Convert BigInt to string
+          const amountCollected=campaign.amountCollected.toString();
+          const res = await axios.get(metadata);
+          const imageUrl = res.data.imageUrl;
+          const tag = res.data.tag;
+          const description = res.data.description;
+          return {
+            id: campaign.id,
+            owner: campaign.owner,
+            title: campaign.title,
+            target: ethers.formatEther(target),
+            deadlineDate: new Date(
+              Number(deadline) * 1000
+            ),
+            amountCollected: ethers.formatEther(amountCollected),
+            description:description,
+            tag: tag,
+            imageUrl: imageUrl,
+            metadata: metadata,
+            donators: campaign.donators,
+          };
+        }
+       catch (error) {
+        console.error("Get campaign error:", error);
+        throw error;
+      } finally {
+        set({isfetching:false})
+        
+      }
+    },
   getAllCampaigns: async () => {
     console.log("Called getAllCampaigns");
-    const { contract, setIsLoading } = get();
+    const { contract } = get();
 
     try {
             set({isfetching:true})
@@ -261,7 +273,7 @@ export const useContractStore = create<contractStore>((set, get) => ({
 
       if (numCampaigns.toString() === "0") {
         console.log("No campaigns found");
-        return [];
+        return ;
       }
 
       const allCampaigns = await contract.getAllCampaigns();
@@ -277,6 +289,7 @@ export const useContractStore = create<contractStore>((set, get) => ({
           const res = await axios.get(metadata);
           const imageUrl = res.data.imageUrl;
           const tag = res.data.tag;
+          const description = res.data.description;
           return {
             id: index,
             owner: campaign.owner,
@@ -284,11 +297,12 @@ export const useContractStore = create<contractStore>((set, get) => ({
             imageUrl: imageUrl,
             metadata: metadata,
             tag: tag,
+            description:description,
             target: ethers.formatEther(target),
             amountCollected: ethers.formatEther(amountCollected),
             deadlineDate: new Date(
               Number(deadline) * 1000
-            ).toLocaleDateString(),
+            ),
             donators: campaign.donators,
           };
         }
@@ -305,4 +319,7 @@ export const useContractStore = create<contractStore>((set, get) => ({
 
     }
   },
+  sortCampaigns:(allCampaigns)=>{
+
+  }
 }));
