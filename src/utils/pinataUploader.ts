@@ -1,14 +1,13 @@
 import axios from "axios";
 import FormData from "form-data";
-
-const PINATA_API_KEY = "d33a539cfe33135736ec";
-const PINATA_SECRET =
-  "4439615821323becfd4046e0773b8b0db7cdf3ad5e5e23a6282e8fbfa33f247a";
+const PINATA_API_KEY = process.env.NEXT_PUBLIC_PINATA_API_KEY;
+const PINATA_SECRET =process.env.NEXT_PUBLIC_PINATA_SECRET;
 
 export const uploadImageToPinata = async (
   file: File,
   metadata: { name: string; description: string; tag: string }
 ) => {
+  console.log(PINATA_API_KEY, PINATA_SECRET);
   const formData = new FormData();
   formData.append("file", file);
 
