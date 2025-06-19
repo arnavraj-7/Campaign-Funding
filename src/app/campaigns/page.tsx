@@ -1,9 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import {
-  Card,
-  CardContent,
-} from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
@@ -27,12 +24,12 @@ import {
   Info,
 } from "lucide-react";
 import { useContractStore } from "@/stores/contractsStore";
-import type { campaign, ProcessedCampaign } from "@/types/index.ts";
+import type { ProcessedCampaign } from "@/types/index.ts";
 import Link from "next/link";
-import { all } from "axios";
 import toast from "react-hot-toast";
 import { ethers } from "ethers";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 const tagIcons: Record<string, string> = {
   Technology: "💻",
@@ -50,25 +47,48 @@ const tagIcons: Record<string, string> = {
 
 const Campaigns = () => {
   const router = useRouter();
-  const { getAllCampaigns, isConnected, connectWallet, donate, allCampaigns,contract,isfetching } =
-    useContractStore();
-  const [selectedCampaign, setSelectedCampaign] = useState<campaign | null>(
-    null
-  );
+  const {
+    getAllCampaigns,
+    isConnected,
+    connectWallet,
+    donate,
+    allCampaigns,
+    contract,
+    isfetching,
+  } = useContractStore();
+  const [selectedCampaign, setSelectedCampaign] =
+    useState<ProcessedCampaign | null>(null);
+  const [currentContract, setCurrentContract] =
+    useState<ethers.Contract | null>(null);
   const [donationAmount, setDonationAmount] = useState("");
+  const handleDonations = async (
+    campaignId: number,
+    campaignTitle: string,
+    donor: string,
+    donationAmount: bigint
+  ) => {
+    toast.success(
+      `Donation of ${ethers.formatEther(
+        donationAmount
+      )} ETH made successfully to ${campaignTitle}`,
+      { duration: 5000 }
+    );
+    getAllCampaigns();
+  };
+  useEffect(() => {
+    if (!contract) return;
+    setCurrentContract(contract);
+    contract.on("DonationMade", handleDonations);
+    return () => {
+      if (currentContract) {
+        currentContract.off("DonationMade", handleDonations);
+      }
+    };
+  }, [contract]);
 
   useEffect(() => {
-    if( !contract) return;
-        const currentContract = contract
-      contract.on("DonationMade",(campaignId:number,campaignTitle:string,donor:string,donationAmount:bigint)=>{
-        toast.success(`Donation of ${ethers.formatEther(donationAmount)} ETH made successfully to ${campaignTitle}`,{duration:5000});
-        getAllCampaigns();
-      })
-    
-    
-
     const fetchCampaigns = async () => {
-      if(!isConnected) return
+      if (!isConnected) return;
       try {
         await getAllCampaigns();
         console.log("allCampaigns", allCampaigns);
@@ -76,13 +96,9 @@ const Campaigns = () => {
         }
       } catch (error) {
         console.error("Error fetching campaigns:", error);
-      } finally {
       }
     };
     fetchCampaigns();
-    return () => {
-    currentContract.off("DonationMade");
-  };
   }, [isConnected]);
 
   const formatDeadline = (deadlineDate: Date) => {
@@ -96,7 +112,7 @@ const Campaigns = () => {
   };
 
   const getProgressPercentage = (donated: string, target: string) => {
-    return Math.min((parseFloat(donated) / parseFloat(target)) * 100, 100);
+    return (parseFloat(donated) / parseFloat(target)) * 100;
   };
 
   const gettagColor = (tag?: string) => {
@@ -114,12 +130,12 @@ const Campaigns = () => {
     );
   };
 
-  const handleDonate = async(id:string,amount:string) => {
+  const handleDonate = async (id: number, amount: string) => {
     if (!isConnected) {
       connectWallet();
       return;
     }
-   await donate(id, amount);
+    await donate(Number(id), amount);
     console.log(
       `Donating ${donationAmount} ETH to campaign ${selectedCampaign?.id}`
     );
@@ -152,7 +168,7 @@ const Campaigns = () => {
             <Button
               variant="ghost"
               size="sm"
-              onClick={() =>router.push("/")}
+              onClick={() => router.push("/")}
               className="text-slate-400 hover:text-white"
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
@@ -160,7 +176,7 @@ const Campaigns = () => {
             </Button>
 
             <Button
-              onClick={() =>router.push("/create-campaign")}
+              onClick={() => router.push("/create-campaign")}
               className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white"
             >
               <Plus className="w-4 h-4 mr-2" />
@@ -217,13 +233,14 @@ const Campaigns = () => {
                 >
                   {/* Campaign Image */}
                   <div className="relative h-56 overflow-hidden">
-                    <img
+                    <Image
+                      fill={true}
                       src={campaign.imageUrl}
                       alt={campaign.title}
                       className="absolute h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-slate-900/20 to-transparent"></div>
-                    
+
                     <div className="absolute top-4 left-4">
                       {campaign.tag && (
                         <Badge
@@ -238,7 +255,7 @@ const Campaigns = () => {
                         </Badge>
                       )}
                     </div>
-                    
+
                     <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                       <Button
                         size="sm"
@@ -248,7 +265,7 @@ const Campaigns = () => {
                         <Share2 className="w-4 h-4" />
                       </Button>
                     </div>
-                    
+
                     <div className="absolute bottom-4 left-4 right-4">
                       <h3 className="text-white font-bold text-xl mb-2 line-clamp-2 font-playfair">
                         {campaign.title}
@@ -278,10 +295,15 @@ const Campaigns = () => {
                         </span>
                       </div>
 
-                      <Progress value={progress} className="h-3 bg-slate-700/50 rounded-full" />
+                      <Progress
+                        value={progress}
+                        className="h-3 bg-slate-700/50 rounded-full"
+                      />
 
                       <div className="flex justify-between text-sm text-slate-400 font-inter">
-                        <span className="font-medium">{progress.toFixed(1)}% funded</span>
+                        <span className="font-medium">
+                          {progress.toFixed(1)}% funded
+                        </span>
                         <span>
                           {Math.floor(Math.random() * 50 + 10)} backers
                         </span>
@@ -308,73 +330,18 @@ const Campaigns = () => {
                         href={campaign.metadata}
                         target="_blank"
                       >
-                        {campaign.metadata.slice(0,25)}...
+                        {campaign.metadata.slice(0, 25)}...
                       </Link>
                     </div>
 
                     {/* Action Button */}
                     <div className="pt-2 flex justify-between gap-x-5">
-                      <Dialog>
-                        <DialogTrigger asChild>
-                          <Button
-                            className={`w-2/3 py-4 text-lg rounded-xl transition-all duration-300 font-inter font-semibold ${
-                              isEnded
-                                ? "bg-slate-600 hover:bg-slate-700 text-slate-300"
-                                : "bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white transform hover:scale-[1.02] shadow-lg hover:shadow-emerald-500/25"
-                            }`}
-                            disabled={isEnded}
-                          >
-                            {isEnded ? "Campaign Ended" : "Support This Project"}
-                          </Button>
-                        </DialogTrigger>
-                        <DialogContent className="bg-slate-800/95 backdrop-blur-sm border-slate-700 text-white rounded-2xl">
-                          <DialogHeader>
-                            <DialogTitle className="font-playfair text-2xl">Support {campaign.title}</DialogTitle>
-                            <DialogDescription className="text-slate-300 font-inter">
-                              Help bring this project to life with your contribution
-                            </DialogDescription>
-                          </DialogHeader>
-                          <div className="space-y-6 pt-4">
-                            <div className="space-y-3">
-                              <Label htmlFor="amount" className="text-white font-medium font-inter">
-                                Donation Amount (ETH)
-                              </Label>
-                              <Input
-                                id="amount"
-                                type="number"
-                                step="0.01"
-                                placeholder="0.1"
-                                value={donationAmount}
-                                onChange={(e) =>
-                                  setDonationAmount(e.target.value)
-                                }
-                                className="bg-slate-700/50 border-slate-600 text-white font-inter rounded-xl py-3"
-                              />
-                            </div>
-                            <Button
-                              onClick={()=>{
-                                handleDonate(String(campaign.id), donationAmount);
-                              }}
-                              className="w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 py-4 text-lg font-semibold rounded-xl transition-all duration-300 font-inter"
-                              disabled={!donationAmount}
-                            >
-                              {!isConnected ? (
-                                <>
-                                  <Wallet className="w-5 h-5 mr-2" />
-                                  Connect & Donate
-                                </>
-                              ) : (
-                                `Donate ${donationAmount || "0"} ETH`
-                              )}
-                            </Button>
-                          </div>
-                        </DialogContent>
-                      </Dialog>
-                      <span>
-                        <Link href={`/campaigns/${campaign.id}`}>
-                      <Info /> More Info
-                        </Link>
-                      </span>
+                      <Link href={`/campaigns/${campaign.id}`}>
+                        <Button className="w-full py-4 text-lg rounded-xl transition-all duration-300 font-inter font-semibold bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white transform hover:scale-[1.02] shadow-lg hover:shadow-purple-500/25">
+                          <Info className="w-5 h-5 mr-2" />
+                          Donate and View Campaign Details
+                        </Button>
+                      </Link>
                     </div>
                   </CardContent>
                 </Card>

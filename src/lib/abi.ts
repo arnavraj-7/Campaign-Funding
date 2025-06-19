@@ -1,4 +1,4 @@
-export const CONTRACT_ABI = [
+export const CONTRACT_ABI =[
     {
       "anonymous": false,
       "inputs": [
@@ -209,6 +209,11 @@ export const CONTRACT_ABI = [
               "internalType": "bool",
               "name": "exists",
               "type": "bool"
+            },
+            {
+              "internalType": "address[]",
+              "name": "donators",
+              "type": "address[]"
             }
           ],
           "internalType": "struct CrowdFunding.Campaign[]",
@@ -230,29 +235,51 @@ export const CONTRACT_ABI = [
       "name": "getCampaign",
       "outputs": [
         {
-          "internalType": "address",
-          "name": "owner",
-          "type": "address"
-        },
-        {
-          "internalType": "string",
-          "name": "title",
-          "type": "string"
-        },
-        {
-          "internalType": "uint256",
-          "name": "target",
-          "type": "uint256"
-        },
-        {
-          "internalType": "uint256",
-          "name": "deadline",
-          "type": "uint256"
-        },
-        {
-          "internalType": "uint256",
-          "name": "amountCollected",
-          "type": "uint256"
+          "components": [
+            {
+              "internalType": "address",
+              "name": "owner",
+              "type": "address"
+            },
+            {
+              "internalType": "string",
+              "name": "title",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "metadata",
+              "type": "string"
+            },
+            {
+              "internalType": "uint256",
+              "name": "target",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "deadline",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "amountCollected",
+              "type": "uint256"
+            },
+            {
+              "internalType": "bool",
+              "name": "exists",
+              "type": "bool"
+            },
+            {
+              "internalType": "address[]",
+              "name": "donators",
+              "type": "address[]"
+            }
+          ],
+          "internalType": "struct CrowdFunding.Campaign",
+          "name": "",
+          "type": "tuple"
         }
       ],
       "stateMutability": "view",
@@ -281,30 +308,6 @@ export const CONTRACT_ABI = [
         {
           "internalType": "uint256",
           "name": "totalAmountDonated",
-          "type": "uint256"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "user",
-          "type": "address"
-        },
-        {
-          "internalType": "uint256",
-          "name": "campaignId",
-          "type": "uint256"
-        }
-      ],
-      "name": "getUserDonation",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
           "type": "uint256"
         }
       ],
@@ -343,30 +346,6 @@ export const CONTRACT_ABI = [
           "internalType": "address",
           "name": "",
           "type": "address"
-        },
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "name": "userDonations",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "",
-          "type": "address"
         }
       ],
       "name": "users",
@@ -386,4 +365,4 @@ export const CONTRACT_ABI = [
       "type": "function"
     }
   ]
-export const CONTRACT_ADDRESS = "0x9A676e781A523b5d0C0e43731313A708CB607508";
+export const CONTRACT_ADDRESS = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
