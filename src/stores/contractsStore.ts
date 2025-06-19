@@ -281,16 +281,15 @@ export const useContractStore = create<contractStore>((set, get) => ({
             id: index,
             owner: campaign.owner,
             title: campaign.title,
-         // Convert BigInt to string
             imageUrl: imageUrl,
             metadata: metadata,
             tag: tag,
-            // Add formatted versions for display
             target: ethers.formatEther(target),
             amountCollected: ethers.formatEther(amountCollected),
             deadlineDate: new Date(
               Number(deadline) * 1000
             ).toLocaleDateString(),
+            donators: campaign.donators,
           };
         }
       );
