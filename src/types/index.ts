@@ -1,5 +1,5 @@
 
-export type campaign = { owner: string; title: string; target: number; deadline: number;donated?: number; 
+export type campaign = {id:number, owner: string; title: string; target: number; deadline: number;donated?: number; 
     amountCollected: number; metadata: string; exists: boolean;donators:string[] };
 
 export type ProcessedCampaign = {
@@ -9,7 +9,6 @@ export type ProcessedCampaign = {
     target: string;
     deadlineDate: Date;
     amountCollected: string;
-    targetEth: string;
     description:string;
     tag:string;
     imageUrl:string;
