@@ -12,6 +12,7 @@ contract CrowdFunding {
         uint256 deadline;
         uint256 amountCollected;
         bool exists;
+        address[]donators;
     }
 
     uint256 public numberOfCampaigns = 0;
@@ -25,8 +26,6 @@ contract CrowdFunding {
     }
 
     mapping(address => User) public users;
-    // Separate mapping for donations to avoid nested mapping issues
-    mapping(address => mapping(uint256 => uint256)) public userDonations;
     uint256 public numberOfUsers = 0;
 
     // Events
@@ -85,30 +84,30 @@ contract CrowdFunding {
             numberOfUsers++;
         }
         currentUser.totalAmountDonated += msg.value;
-        userDonations[msg.sender][campaignId] += msg.value;
+        currentCampaign.donators.push(msg.sender);
         string memory campaign_title = currentCampaign.title;
         emit DonationMade(campaignId,campaign_title, msg.sender, msg.value);
     }
 
     // Get campaign details safely
     function getCampaign(uint256 campaignId) public view returns (
-        address owner,
-        string memory title,
-        uint256 target,
-        uint256 deadline,
-        uint256 amountCollected
+        Campaign memory
     ) {
         require(campaignId < numberOfCampaigns, "Campaign does not exist");
         require(campaigns[campaignId].exists, "Campaign does not exist");
         
         Campaign storage c = campaigns[campaignId];
-        return (
-            c.owner,
-            c.title,
-            c.target,
-            c.deadline,
-            c.amountCollected
-        );
+        
+          Campaign memory compaign = Campaign({
+           owner: c.owner,
+           title: c.title,
+            target:c.target,
+            deadline:c.deadline,
+           metadata: c.metadata,
+            amountCollected:c.amountCollected,
+           donators: c.donators,
+           exists: c.exists});
+       return compaign;
     }
 
     // Get all campaigns - FIXED VERSION
@@ -124,16 +123,12 @@ contract CrowdFunding {
                 target: campaign.target,
                 deadline: campaign.deadline,
                 amountCollected: campaign.amountCollected,
-                exists: campaign.exists
+                exists: campaign.exists,
+                donators: campaign.donators
             });
         }
         
         return allCampaigns;
-    }
-
-    // Get user's donation for specific campaign
-    function getUserDonation(address user, uint256 campaignId) public view returns (uint256) {
-        return userDonations[user][campaignId];
     }
 
     // Get user details
