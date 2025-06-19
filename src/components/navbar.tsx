@@ -6,7 +6,7 @@ import { useContractStore } from "@/stores/contractsStore";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { connectWallet } = useContractStore();
+  const { connectWallet,isConnected } = useContractStore();
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -45,11 +45,11 @@ const Navbar = () => {
             ))}
             <Button 
               size="sm"
-              className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold"
+              className={`${isConnected?"bg-gradient-to-r from-green-700 to-green-800 hover-from-green-800 hover-to-green-900 ":"bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold"}`}
               onClick={connectWallet}
             >
               
-              Connect Wallet
+              {isConnected? "Connected" :"Connect Wallet"}
             </Button>
           </div>
 
