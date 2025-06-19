@@ -24,6 +24,7 @@ import {
   Share2,
   Plus,
   Wallet,
+  Info,
 } from "lucide-react";
 import { useContractStore } from "@/stores/contractsStore";
 import type { campaign, ProcessedCampaign } from "@/types/index.ts";
@@ -57,12 +58,14 @@ const Campaigns = () => {
   const [donationAmount, setDonationAmount] = useState("");
 
   useEffect(() => {
-    if(isConnected && contract){
+    if( !contract) return;
+        const currentContract = contract
       contract.on("DonationMade",(campaignId:number,campaignTitle:string,donor:string,donationAmount:bigint)=>{
         toast.success(`Donation of ${ethers.formatEther(donationAmount)} ETH made successfully to ${campaignTitle}`,{duration:5000});
         getAllCampaigns();
       })
-    }
+    
+    
 
     const fetchCampaigns = async () => {
       if(!isConnected) return
@@ -77,6 +80,9 @@ const Campaigns = () => {
       }
     };
     fetchCampaigns();
+    return () => {
+    currentContract.off("DonationMade");
+  };
   }, [isConnected]);
 
   const formatDeadline = (deadlineDate: Date) => {
@@ -188,7 +194,7 @@ const Campaigns = () => {
                 Be the first to create a campaign and start raising funds!
               </p>
               <Button
-                onClick={() => (window.location.href = "/create-campaign")}
+                onClick={() => router.push("/create-campaign")}
                 className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white"
               >
                 Create Campaign
@@ -307,17 +313,16 @@ const Campaigns = () => {
                     </div>
 
                     {/* Action Button */}
-                    <div className="pt-2">
+                    <div className="pt-2 flex justify-between gap-x-5">
                       <Dialog>
                         <DialogTrigger asChild>
                           <Button
-                            className={`w-full py-4 text-lg rounded-xl transition-all duration-300 font-inter font-semibold ${
+                            className={`w-2/3 py-4 text-lg rounded-xl transition-all duration-300 font-inter font-semibold ${
                               isEnded
                                 ? "bg-slate-600 hover:bg-slate-700 text-slate-300"
                                 : "bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white transform hover:scale-[1.02] shadow-lg hover:shadow-emerald-500/25"
                             }`}
                             disabled={isEnded}
-                            onClick={() => setSelectedCampaign(campaign)}
                           >
                             {isEnded ? "Campaign Ended" : "Support This Project"}
                           </Button>
@@ -348,7 +353,7 @@ const Campaigns = () => {
                             </div>
                             <Button
                               onClick={()=>{
-                                handleDonate(campaign.id, donationAmount);
+                                handleDonate(String(campaign.id), donationAmount);
                               }}
                               className="w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 py-4 text-lg font-semibold rounded-xl transition-all duration-300 font-inter"
                               disabled={!donationAmount}
@@ -365,6 +370,11 @@ const Campaigns = () => {
                           </div>
                         </DialogContent>
                       </Dialog>
+                      <span>
+                        <Link href={`/campaigns/${campaign.id}`}>
+                      <Info /> More Info
+                        </Link>
+                      </span>
                     </div>
                   </CardContent>
                 </Card>
