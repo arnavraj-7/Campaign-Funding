@@ -1,31 +1,16 @@
 "use client"
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
-import { 
-  Dialog, 
-  DialogContent, 
-  DialogDescription, 
-  DialogHeader, 
-  DialogTitle, 
-  DialogTrigger 
-} from "@/components/ui/dialog";
-import { 
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
 import { Wallet, Plus, ArrowLeft, Upload, X, Eye } from "lucide-react";
 import { useContractStore } from '@/stores/contractsStore';
 import { uploadImageToPinata, uploadJSONToPinata } from '@/utils/pinataUploader';
+import toast from 'react-hot-toast';
+import { ethers } from 'ethers';
+import Image from 'next/image';
 
 const tags = [
   { value: 'technology', label: 'Technology', icon: '💻', color: 'bg-blue-500/20 text-blue-400 border-blue-500/30' },
@@ -41,10 +26,11 @@ const tags = [
 ];
 
 const CreateCampaign = () => {
-  const { connectWallet, createCampaign, isConnected, isLoading, account } = useContractStore();
+  const { connectWallet, createCampaign, isConnected, isLoading, account ,contract} = useContractStore();
   const [image, setImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string>('');
   const [selectedtag, setSelectedtag] = useState('');
+  const [currentContract,setCurrent] = useState<ethers.Contract>();
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -97,6 +83,27 @@ const CreateCampaign = () => {
       console.error('Error creating campaign:', error);
     }
   };
+  const handleCreation = async (campaignId:string, owner:string, title:string)=>{
+         toast.success(`Campaign ${title} Created Successfully!`);
+       };
+
+  useEffect(()=>{
+    if(isConnected){
+      if(!contract) return;
+      setCurrent(contract);
+    }
+  },[isConnected])
+  useEffect(()=>{
+
+     if(currentContract){
+       currentContract.on("CampaignCreated",handleCreation);
+    }
+
+   return ()=>{
+    if(!currentContract) return;
+    currentContract.removeListener("CampaignCreated",handleCreation);
+   }
+  },[contract])
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
@@ -280,8 +287,9 @@ const CreateCampaign = () => {
                       </div>
                     ) : (
                       <div className="relative">
-                        <img
+                        <Image
                           src={imagePreview}
+                          fill={true}
                           alt="Campaign preview"
                           className="w-full h-64 object-cover rounded-lg border border-slate-600"
                         />
