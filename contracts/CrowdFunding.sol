@@ -5,6 +5,7 @@ contract CrowdFunding {
 
     // CAMPAIGNS
     struct Campaign {
+        uint256 id;
         address owner;
         string title;
         string metadata;
@@ -47,6 +48,7 @@ contract CrowdFunding {
         uint256 campaignId = numberOfCampaigns;
         
         Campaign storage campaign = campaigns[campaignId];
+        campaign.id =numberOfCampaigns;
         campaign.owner = owner;
         campaign.title = title;
         campaign.target = target;
@@ -99,6 +101,7 @@ contract CrowdFunding {
         Campaign storage c = campaigns[campaignId];
         
           Campaign memory compaign = Campaign({
+            id:c.id,
            owner: c.owner,
            title: c.title,
             target:c.target,
@@ -117,6 +120,7 @@ contract CrowdFunding {
         for(uint256 i = 0; i < numberOfCampaigns; i++) {
             Campaign storage campaign = campaigns[i];
             allCampaigns[i] = Campaign({
+                id: campaign.id,
                 owner: campaign.owner,
                 title: campaign.title,
                 metadata: campaign.metadata,
