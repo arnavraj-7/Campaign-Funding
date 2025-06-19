@@ -1,4 +1,4 @@
-# 🚀 Web3 DApp: React + Ethers.js + Solidity Smart Contracts
+# 🚀 Web3 DApp: Next.js + Ethers.js + Solidity Smart Contracts
 
 ## 📘 Overview
 
