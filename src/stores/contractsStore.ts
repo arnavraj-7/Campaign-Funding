@@ -147,6 +147,7 @@ export const useContractStore = create<contractStore>((set, get) => ({
       console.log("Creating campaign with params:", {
         owner,
         title,
+        metadata,
         targetAmount: targetAmount.toString(),
         deadlineTimestamp,
       });

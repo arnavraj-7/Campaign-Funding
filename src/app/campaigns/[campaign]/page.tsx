@@ -50,7 +50,8 @@ const tagIcons: Record<string, string> = {
 const CampaignDetail = () => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-  const { campaign: campaignId } = useParams();
+  const params = useParams();
+  const campaignId = params?.campaign;
   const { allCampaigns, isfetching, isConnected, connectWallet, donate, getAllCampaigns } = useContractStore();
   const [currentCampaign, setCurrent] = useState<ProcessedCampaign | null>(null);
   const [donationAmount, setDonationAmount] = useState("");
