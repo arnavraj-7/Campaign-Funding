@@ -283,18 +283,18 @@ const CreateCampaign = () => {
                           type="button"
                           variant="outline"
                           onClick={() => document.getElementById('image-upload')?.click()}
-                          className="border-slate-600 text-slate-300 hover:bg-slate-700"
+                          className="border-slate-600 text-slate-300 hover:bg-purple-500 hover:border-purple-400 bg-zinc-800/50"
                         >
                           Choose Image
                         </Button>
                       </div>
                     ) : (
-                      <div className="relative">
+                      <div className="relative h-64">
                         <Image
                           src={imagePreview}
-                          fill={true}
+                            fill={true}
                           alt="Campaign preview"
-                          className="w-full h-64 object-cover rounded-lg border border-slate-600"
+                          className="w-full h-full object-cover rounded-lg border border-slate-600"
                         />
                         <Button
                           type="button"
