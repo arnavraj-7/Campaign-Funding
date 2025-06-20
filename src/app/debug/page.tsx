@@ -41,7 +41,7 @@ const ContractDebug = () => {
       
       addLog("Basic calls successful!");
     } catch (error) {
-      addLog(`Basic calls failed: ${error.message}`);
+      addLog(`Basic calls failed: ${error}`);
     }
   };
 
@@ -66,7 +66,7 @@ const ContractDebug = () => {
       
       addLog("Campaign created successfully!");
     } catch (error) {
-      addLog(`Create campaign failed: ${error.message}`);
+      addLog(`Create campaign failed: ${error}`);
     }
   };
 
@@ -81,7 +81,7 @@ const ContractDebug = () => {
         });
       }
     } catch (error) {
-      addLog(`Get all campaigns failed: ${error.message}`);
+      addLog(`Get all campaigns failed: ${error}`);
     }
   };
 
@@ -100,7 +100,7 @@ const ContractDebug = () => {
       addLog(`Raised: ${campaign.amountCollectedEth} ETH`);
       addLog(`Deadline: ${campaign.deadlineDate}`);
     } catch (error) {
-      addLog(`Get campaign failed: ${error.message}`);
+      addLog(`Get campaign failed: ${error}`);
     }
   };
 
