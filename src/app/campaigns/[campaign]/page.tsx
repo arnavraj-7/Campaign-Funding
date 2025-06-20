@@ -25,23 +25,20 @@ import {
   Clock,
   Wallet,
   Users,
-  Target,
-  Calendar,
   Share2,
 } from "lucide-react";
 import { useContractStore } from "@/stores/contractsStore";
 import type { ProcessedCampaign } from "@/types/index.ts";
 import Image from "next/image";
 import Link from "next/link";
-import { ethers } from "ethers";
 import toast from "react-hot-toast";
 
 const tagIcons: Record<string, string> = {
-  Technology: "💻",
-  Environment: "🌱",
-  Education: "📚",
-  Health: "🏥",
-  Art: "🎨",
+  "Technology": "💻",
+  "Environment": "🌱",
+  "Education": "📚",
+  "Health": "🏥",
+  "Art": "🎨",
   "Arts & Culture": "🎨",
   "Startups / Business": "🚀",
   "Child Welfare": "👶",
@@ -103,8 +100,9 @@ const CampaignDetail = () => {
       toast.success(`Donation of ${donationAmount} ETH made successfully!`);
       setDonationAmount("");
       getAllCampaigns();
-    } catch (error) {
-      toast.error("Donation failed. Please try again.");
+      //eslint-disable-next-line
+    } catch (error : any) {
+      toast.error("Donation failed. Please try again:.",error.message);
     }
   };
 
