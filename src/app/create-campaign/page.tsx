@@ -7,10 +7,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Wallet, Plus, ArrowLeft, Upload, X, Eye } from "lucide-react";
 import { useContractStore } from '@/stores/contractsStore';
-import { uploadImageToPinata, uploadJSONToPinata } from '@/utils/pinataUploader';
 import toast from 'react-hot-toast';
 import { ethers } from 'ethers';
 import Image from 'next/image';
+import axios from 'axios';
 
 const tags = [
   { value: 'technology', label: 'Technology', icon: '💻', color: 'bg-blue-500/20 text-blue-400 border-blue-500/30' },
@@ -63,16 +63,15 @@ const CreateCampaign = () => {
     
     try {
       const tagData = tags.find(cat => cat.value === selectedtag);
-      let data = {
+      const data = {
         name: formData.title,
         description: formData.description,
         tag: tagData?.label || '',
-        imageUrl: ""
       };
-      
-      const imageurl = await uploadImageToPinata(image, data);
-      data = { ...data, imageUrl: imageurl };
-      const metadata = await uploadJSONToPinata(data);
+      const form =new FormData();
+      form.append('file', image);
+      form.append('data', JSON.stringify(data));
+     const metadata : string= (await axios.post('/api/uploadmetadata', form)).data.data;
       
       await createCampaign(account, formData.title, metadata, formData.target, formData.deadline);
       
