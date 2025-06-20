@@ -53,7 +53,7 @@ const Navbar = () => {
                 onClick={() => {
                   if(item.href=="/") router.push(`${item.href}`); scrollToTop();
                   if(item.name=="Contact") router.push(`${item.href}`);
-                  scrollToSection(item.href)}}
+                  router.push(`/`); scrollToSection(item.href)}}
                 className="text-slate-300 hover:text-purple-400 transition-colors duration-200 font-medium my-0 mx-2"
               >
                 {item.name}
