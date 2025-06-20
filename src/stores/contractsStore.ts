@@ -287,7 +287,7 @@ export const useContractStore = create<contractStore>((set, get) => ({
 
       // Process the campaigns data and convert BigInt to string
       let processedCampaigns = allCampaigns.map(
-        async (campaign: campaign, index: number) => {
+        async (campaign: campaign,) => {
           const deadline = campaign.deadline.toString();
           const metadata = campaign.metadata;
           const target = campaign.target.toString(); // Convert BigInt to string
@@ -297,7 +297,7 @@ export const useContractStore = create<contractStore>((set, get) => ({
           const tag = res.data.tag;
           const description = res.data.description;
           return {
-            id: index,
+            id: Number(campaign.id.toString()),
             owner: campaign.owner,
             title: campaign.title,
             imageUrl: imageUrl,
