@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Menu, X, Zap } from "lucide-react";
-import { useContractStore } from "@/stores/contractsStore";
+import { useContractStore } from "@/stores/contractsStore"
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -12,12 +12,23 @@ const Navbar = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
+  const scrollToTop = () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+};
+
+   const scrollToSection = (sectionId: string) => {
+      const element = document.getElementById(sectionId);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+    };
+  
   const navItems = [
     { name: "Home", href: "/" },
-    { name: "Features", href: "/#features" },
-    { name: "Education", href: "/#education" },
-    { name: "About", href: "/#about" },
-    { name: "Contact", href: "#contact" },
+    { name: "Features", href: "features" },
+    { name: "Education", href: "education" },
+    { name: "About", href: "about" },
+    { name: "Contact", href: "contact" },
   ];
 
   return (
@@ -35,13 +46,16 @@ const Navbar = () => {
           {/* Desktop Menu */}
           <div className="hidden md:flex items-center space-x-8">
             {navItems.map((item) => (
-              <a
+              <Button
+              variant={"link"}
                 key={item.name}
-                href={item.href}
-                className="text-slate-300 hover:text-purple-400 transition-colors duration-200 font-medium"
+                onClick={() => {
+                  if(item.href=="/") scrollToTop();
+                  scrollToSection(item.href)}}
+                className="text-slate-300 hover:text-purple-400 transition-colors duration-200 font-medium my-0 mx-2"
               >
                 {item.name}
-              </a>
+              </Button>
             ))}
             <Button 
               size="sm"
