@@ -19,8 +19,6 @@ import type { ProcessedCampaign } from "@/types/index.ts";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { ethers } from "ethers";
-import toast from "react-hot-toast";
 
 const tagIcons: Record<string, string> = {
   Technology: "💻",
@@ -41,44 +39,16 @@ const Campaigns = () => {
   const [tag, setTag] = useState<string>("All");
   const {isLoading,
     connectWallet,
-
     getAllCampaigns,
     isConnected,
     allCampaigns,
-    contract,
     isfetching,
     sortedCampaigns,
   } = useContractStore();
-  const [currentContract, setCurrentContract] =
-    useState<ethers.Contract | null>(null);
   const [taggedCampaigns, setTaggedCampaigns] = useState<ProcessedCampaign[]>([]);
 
 
 
-  useEffect(() => {
-      const handleDonations = async (
-    campaignId: number,
-    campaignTitle: string,
-    donor: string,
-    donationAmount: bigint
-  ) => {
-    toast.success(
-      `Donation of ${ethers.formatEther(
-        donationAmount
-      )} ETH made successfully to ${campaignTitle}`,
-      { duration: 5000 }
-    );
-    getAllCampaigns();
-  };
-    if (!contract) return;
-    setCurrentContract(contract);
-    contract.on("DonationMade", handleDonations);
-    return () => {
-      if (currentContract) {
-        currentContract.off("DonationMade", handleDonations);
-      }
-    };
-  }, [contract, currentContract, getAllCampaigns]);
 
   useEffect(() => {
     const fetchCampaigns = async () => {
@@ -93,7 +63,7 @@ const Campaigns = () => {
       }
     };
     fetchCampaigns();
-  }, [isConnected, getAllCampaigns, allCampaigns]);
+  }, [isConnected, getAllCampaigns,]);
 
   const formatDeadline = (deadlineDate: Date) => {
     const now = new Date();
@@ -178,7 +148,7 @@ const Campaigns = () => {
               variant="ghost"
               size="sm"
               onClick={() => router.push("/")}
-              className="text-slate-400 hover:text-white"
+              className="text-slate-400 hover:text-white hover:bg-transparent cursor-pointer hover:underline"
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
               Back to Home
@@ -367,7 +337,7 @@ const Campaigns = () => {
                     <div className="pt-2">
                       <Link href={`/campaigns/${campaign.id}`}>
                         <Button
-                          className="w-full py-4 text-lg rounded-xl transition-all duration-300 font-inter font-semibold bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white transform hover:scale-[1.02] shadow-lg hover:shadow-purple-500/25"
+                          className="w-full py-4 text-lg rounded-xl transition-all duration-300 font-inter font-semibold bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white transform hover:scale-[1.02] shadow-lg hover:shadow-purple-500/25 cursor-pointer"
                         >
                           <Info className="w-5 h-5 mr-2" />
                           View Campaign Details
