@@ -26,7 +26,8 @@ const tags = [
 ];
 
 const CreateCampaign = () => {
-  const { connectWallet, createCampaign, isConnected, isLoading, account ,contract} = useContractStore();
+  const { connectWallet, createCampaign, isConnected, account ,contract} = useContractStore();
+  const [isLoading,setisLoading] = useState(false);
   const [image, setImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string>('');
   const [selectedtag, setSelectedtag] = useState('');
@@ -56,6 +57,7 @@ const CreateCampaign = () => {
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
+    setisLoading(true);
     e.preventDefault();
     if (!account || !image || !selectedtag) return;
     
@@ -79,6 +81,7 @@ const CreateCampaign = () => {
       setImage(null);
       setImagePreview('');
       setSelectedtag('');
+      setisLoading(false);
     } catch (error) {
       console.error('Error creating campaign:', error);
     }
@@ -92,7 +95,7 @@ const CreateCampaign = () => {
       if(!contract) return;
       setCurrent(contract);
     }
-  },[isConnected])
+  },[isConnected,contract])
   useEffect(()=>{
 
      if(currentContract){
@@ -103,7 +106,7 @@ const CreateCampaign = () => {
     if(!currentContract) return;
     currentContract.removeListener("CampaignCreated",handleCreation);
    }
-  },[contract])
+  },[contract,currentContract])
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">

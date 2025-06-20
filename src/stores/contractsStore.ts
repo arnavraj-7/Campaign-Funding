@@ -9,6 +9,7 @@ type contractStore = {
   contract: ethers.Contract | null;
   isLoading: boolean;
   isConnected: boolean;
+  numberOfCampaigns: number;
   account: Address | null;
   isfetching: boolean;
   allCampaigns: ProcessedCampaign[] | null;
@@ -34,6 +35,7 @@ type contractStore = {
 export const useContractStore = create<contractStore>((set, get) => ({
   contract: null,
   isLoading: false,
+  numberOfCampaigns:0,
   isConnected: false,
   account: null,
   allCampaigns: null,
@@ -102,6 +104,7 @@ export const useContractStore = create<contractStore>((set, get) => ({
           console.log("Testing numberOfCampaigns call...");
           const numCampaigns = await contractInstance.numberOfCampaigns();
           console.log("Number of campaigns:", numCampaigns.toString());
+          set({numberOfCampaigns:numCampaigns.toString()});
         } catch (testError) {
           console.error("Failed to call numberOfCampaigns:", testError);
         }
@@ -257,9 +260,11 @@ export const useContractStore = create<contractStore>((set, get) => ({
   },
   getAllCampaigns: async () => {
     console.log("Called getAllCampaigns");
-    const { contract } = get();
+    const { contract, isConnected } = get();
+    console.log(isConnected);
 
     try {
+      if(isConnected === false){return};
       set({ isfetching: true });
 
       if (!contract) {

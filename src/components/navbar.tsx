@@ -1,13 +1,14 @@
 "use client";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Menu, X, Zap } from "lucide-react";
+import { Menu,  X, Zap } from "lucide-react";
 import { useContractStore } from "@/stores/contractsStore"
+import { useRouter } from "next/navigation";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { connectWallet,isConnected } = useContractStore();
-
+  const router = useRouter();
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
@@ -27,8 +28,8 @@ const Navbar = () => {
     { name: "Home", href: "/" },
     { name: "Features", href: "features" },
     { name: "Education", href: "education" },
-    { name: "About", href: "about" },
-    { name: "Contact", href: "contact" },
+    { name: "About", href: "footer" },
+    { name: "Contact", href: "mailto:arnavrajcodes@gmail.com" },
   ];
 
   return (
@@ -51,6 +52,7 @@ const Navbar = () => {
                 key={item.name}
                 onClick={() => {
                   if(item.href=="/") scrollToTop();
+                  if(item.name=="Contact") router.push(`${item.href}`);
                   scrollToSection(item.href)}}
                 className="text-slate-300 hover:text-purple-400 transition-colors duration-200 font-medium my-0 mx-2"
               >

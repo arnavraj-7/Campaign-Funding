@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
@@ -12,6 +12,7 @@ import {
   Info,
   TrendingUp,
   Users,
+  Wallet,
 } from "lucide-react";
 import { useContractStore } from "@/stores/contractsStore";
 import type { ProcessedCampaign } from "@/types/index.ts";
@@ -38,7 +39,9 @@ const tagIcons: Record<string, string> = {
 const Campaigns = () => {
   const router = useRouter();
   const [tag, setTag] = useState<string>("All");
-  const {
+  const {isLoading,
+    connectWallet,
+
     getAllCampaigns,
     isConnected,
     allCampaigns,
@@ -50,7 +53,10 @@ const Campaigns = () => {
     useState<ethers.Contract | null>(null);
   const [taggedCampaigns, setTaggedCampaigns] = useState<ProcessedCampaign[]>([]);
 
-  const handleDonations = async (
+
+
+  useEffect(() => {
+      const handleDonations = async (
     campaignId: number,
     campaignTitle: string,
     donor: string,
@@ -64,8 +70,6 @@ const Campaigns = () => {
     );
     getAllCampaigns();
   };
-
-  useEffect(() => {
     if (!contract) return;
     setCurrentContract(contract);
     contract.on("DonationMade", handleDonations);
@@ -74,7 +78,7 @@ const Campaigns = () => {
         currentContract.off("DonationMade", handleDonations);
       }
     };
-  }, [contract]);
+  }, [contract, currentContract, getAllCampaigns]);
 
   useEffect(() => {
     const fetchCampaigns = async () => {
@@ -89,7 +93,7 @@ const Campaigns = () => {
       }
     };
     fetchCampaigns();
-  }, [isConnected]);
+  }, [isConnected, getAllCampaigns, allCampaigns]);
 
   const formatDeadline = (deadlineDate: Date) => {
     const now = new Date();
@@ -143,6 +147,28 @@ const Campaigns = () => {
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse"></div>
         <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-blue-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse delay-1000"></div>
       </div>
+      {!isConnected &&(
+                <Card className="bg-slate-800/50 backdrop-blur-sm border-slate-700 max-w-md mx-auto">
+                  <CardHeader className="text-center">
+                    <div className="w-16 h-16 bg-gradient-to-r from-purple-600 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <Wallet className="w-8 h-8 text-white" />
+                    </div>
+                    <CardTitle className="text-white text-2xl">Connect Your Wallet</CardTitle>
+                    <CardDescription className="text-slate-300">
+                      Connect your Web3 wallet to start creating campaigns
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <Button
+                      onClick={connectWallet}
+                      disabled={isLoading}
+                      className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white py-6 text-lg rounded-xl"
+                    >
+                      {isLoading ? 'Connecting...' : 'Connect Wallet'}
+                    </Button>
+                  </CardContent>
+                </Card>
+                )}
 
       {/* Header */}
       <div className="relative overflow-hidden bg-gradient-to-r from-purple-600/10 to-blue-600/10 border-b border-white/10">
