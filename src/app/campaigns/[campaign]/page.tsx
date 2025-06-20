@@ -49,6 +49,7 @@ const tagIcons: Record<string, string> = {
 
 const CampaignDetail = () => {
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
   const { campaign: campaignId } = useParams();
   const { allCampaigns, isfetching, isConnected, connectWallet, donate, getAllCampaigns } = useContractStore();
   const [currentCampaign, setCurrent] = useState<ProcessedCampaign | null>(null);
@@ -61,6 +62,35 @@ const CampaignDetail = () => {
     setCurrent(isCurrent);
     console.log(isCurrent.donators);
   }, [allCampaigns, campaignId]);
+
+    // useEffect(() => {
+    //     const handleDonations = async (
+    //   campaignId: number,
+    //   campaignTitle: string,
+    //   donor: string,
+    //   donationAmount: bigint
+    // ) => {
+    //   console.log("Donation made");
+    //   toast.success(
+    //     `Donation of ${ethers.formatEther(
+    //       donationAmount
+    //     )} ETH made successfully to ${campaignTitle}`,
+    //     { duration: 5000 }
+    //   );
+    //   getAllCampaigns();
+    // };
+    //   if (!contract) return;
+    //   setCurrentContract(contract);
+    // ;
+    //   contract.on("DonationMade", handleDonations);
+    //   return () => {
+    //     if (currentContract) {
+    //       console.log("Removing event listener");
+    //       currentContract.off("DonationMade", handleDonations);
+    //     }
+    //   };
+    // }, [ currentContract, getAllCampaigns]);
+  
 
   const formatDeadline = (deadlineDate: Date) => {
     const now = new Date();
@@ -94,7 +124,7 @@ const CampaignDetail = () => {
       return;
     }
     if (!currentCampaign || !donationAmount) return;
-    
+      setIsLoading(true);
     try {
       await donate(Number(currentCampaign.id), donationAmount);
       toast.success(`Donation of ${donationAmount} ETH made successfully!`);
@@ -151,12 +181,12 @@ const CampaignDetail = () => {
               variant="ghost"
               size="sm"
               onClick={() => router.push("/campaigns")}
-              className="text-slate-400 hover:text-white"
+              className="text-slate-400 hover:text-white hover:bg-purple-500"
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
               Back to Campaigns
             </Button>
-            <Button variant="ghost" size="sm" className="text-slate-400 hover:text-white">
+            <Button variant="ghost" size="sm" className="text-slate-400 hover:bg-purple-500 hover:text-white">
               <Share2 className="w-4 h-4 mr-2" />
               Share Campaign
             </Button>
@@ -257,12 +287,12 @@ const CampaignDetail = () => {
                 <Dialog>
                   <DialogTrigger asChild>
                     <Button
-                      className={`w-full py-4 text-lg rounded-xl transition-all duration-300 font-inter font-semibold ${
+                      className={`w-full py-4 text-lg rounded-xl transition-all duration-300 font-inter font-semibold cursor-pointer ${
                         isEnded
                           ? "bg-slate-600 hover:bg-slate-700 text-slate-300"
                           : "bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white transform hover:scale-[1.02] shadow-lg hover:shadow-emerald-500/25"
                       }`}
-                      disabled={isEnded}
+                      disabled={isEnded || isLoading}
                     >
                       {isEnded ? "Campaign Ended" : "Support This Project"}
                     </Button>
@@ -291,8 +321,8 @@ const CampaignDetail = () => {
                       </div>
                       <Button
                         onClick={handleDonate}
-                        className="w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 py-4 text-lg font-semibold rounded-xl transition-all duration-300 font-inter"
-                        disabled={!donationAmount}
+                        className="w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 py-4 text-lg font-semibold rounded-xl transition-all duration-300 font-inter cursor-pointer"
+                        disabled={!donationAmount || isLoading}
                       >
                         {!isConnected ? (
                           <>

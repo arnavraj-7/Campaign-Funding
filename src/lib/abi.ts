@@ -85,6 +85,11 @@ export const CONTRACT_ABI =[
       "name": "campaigns",
       "outputs": [
         {
+          "internalType": "uint256",
+          "name": "id",
+          "type": "uint256"
+        },
+        {
           "internalType": "address",
           "name": "owner",
           "type": "address"
@@ -176,6 +181,11 @@ export const CONTRACT_ABI =[
         {
           "components": [
             {
+              "internalType": "uint256",
+              "name": "id",
+              "type": "uint256"
+            },
+            {
               "internalType": "address",
               "name": "owner",
               "type": "address"
@@ -236,6 +246,11 @@ export const CONTRACT_ABI =[
       "outputs": [
         {
           "components": [
+            {
+              "internalType": "uint256",
+              "name": "id",
+              "type": "uint256"
+            },
             {
               "internalType": "address",
               "name": "owner",
@@ -364,5 +379,5 @@ export const CONTRACT_ABI =[
       "stateMutability": "view",
       "type": "function"
     }
-  ]
+  ];
 export const CONTRACT_ADDRESS = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
