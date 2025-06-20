@@ -1,12 +1,13 @@
 "use client";
 import { Zap, Twitter, Github, Instagram , Mail } from "lucide-react";
+import Link from "next/link";
 
 const Footer = () => {
   const socialLinks = [
-    { icon: Twitter, href: "#", label: "Twitter" },
-    { icon: Github, href: "#", label: "GitHub" },
-    { icon: Instagram, href: "#", label: "Discord" },
-    { icon: Mail, href: "#", label: "Email" },
+    { icon: Twitter, href: "https://x.com/ArnavRaj529053", label: "Twitter" },
+    { icon: Github, href: "https://github.com/arnavraj-7/", label: "GitHub" },
+    { icon: Instagram, href: "https://www.instagram.com/excuzemearnav/", label: "Discord" },
+    { icon: Mail, href: "mailto:arnavrajcodes@gmail.com", label: "Email" },
   ];
 
   const footerLinks = {
@@ -39,14 +40,15 @@ const Footer = () => {
             {/* Social Links */}
             <div className="flex space-x-4">
               {socialLinks.map((social) => (
-                <a
+                <Link
                   key={social.label}
                   href={social.href}
+                  target="_blank"
                   className="w-10 h-10 bg-slate-800 rounded-lg flex items-center justify-center text-slate-400 hover:text-purple-400 hover:bg-slate-700 transition-all duration-200"
                   aria-label={social.label}
                 >
                   <social.icon className="h-5 w-5" />
-                </a>
+                </Link>
               ))}
             </div>
           </div>
@@ -58,12 +60,12 @@ const Footer = () => {
               <ul className="space-y-2">
                 {links.map((link) => (
                   <li key={link}>
-                    <a
-                      href="#"
+                    <Link
+                      href={"#"}
                       className="text-slate-400 hover:text-purple-400 transition-colors duration-200 text-sm"
                     >
                       {link}
-                    </a>
+                    </Link>
                   </li>
                 ))}
               </ul>
@@ -74,18 +76,27 @@ const Footer = () => {
         {/* Bottom Bar */}
         <div className="mt-12 pt-8 border-t border-slate-800 flex flex-col md:flex-row justify-between items-center">
           <p className="text-slate-400 text-sm">
-            © 2024 CrowdSpark. Built with ❤️ on Ethereum and nextjs.
+            © 2025 CrowdSpark. Built with ❤️ on Ethereum and nextjs.
           </p>
-          <div className="flex space-x-6 mt-4 md:mt-0">
-            <a href="#" className="text-slate-400 hover:text-purple-400 text-sm transition-colors duration-200">
+          <div className="flex items-center space-x-6 mt-4 md:mt-0">
+            <Link
+              href="https://github.com/arnavraj-7/Crowd-Spark"
+              className="flex items-center space-x-2 px-4 py-2 rounded-lg border border-slate-700 bg-slate-800 text-slate-400 hover:text-purple-400 hover:border-purple-400 transition-all duration-200"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Github className="h-4 w-4" />
+              <span className="text-sm">View on GitHub</span>
+            </Link>
+            <Link href="#" className="text-slate-400 hover:text-purple-400 text-sm transition-colors duration-200">
               Privacy Policy
-            </a>
-            <a href="#" className="text-slate-400 hover:text-purple-400 text-sm transition-colors duration-200">
+            </Link>
+            <Link href="#" className="text-slate-400 hover:text-purple-400 text-sm transition-colors duration-200">
               Terms of Service
-            </a>
-            <a href="#" className="text-slate-400 hover:text-purple-400 text-sm transition-colors duration-200">
+            </Link>
+            <Link href="#" className="text-slate-400 hover:text-purple-400 text-sm transition-colors duration-200">
               Cookies
-            </a>
+            </Link>
           </div>
         </div>
       </div>
