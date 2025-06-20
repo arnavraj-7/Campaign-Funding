@@ -27,6 +27,9 @@ const {isConnected, connectWallet} = useContractStore();
   
   return (
     <html lang="en">
+      <head>
+        <title>Crowd-Spark</title>
+      </head>
       <body>
         
         <Navbar/>
