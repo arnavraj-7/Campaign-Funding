@@ -7,8 +7,12 @@ module.exports = {
     localhost: {
       url: "http://127.0.0.1:8545",
     },
-    amoy: {
-      url: "https://misty-skilled-butterfly.matic-amoy.quiknode.pro/f355585c6b4701296eeb608908d1f9356cdbe61c/",
+        localhost2: {
+      url: "http://127.0.0.1:8546",
+    },
+
+    Holesky: {
+      url: "https://rpc.ankr.com/eth_holesky/5ae64678cd8723fa659a9b1e96628188e66d4c5c2eb28b97bde6e1befb42012d",
       accounts: [process.env.PRIVATE_KEY],
     },
   },
