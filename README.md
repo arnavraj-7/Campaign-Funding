@@ -1,8 +1,8 @@
 # 🚀 Crowd-Spark - Decentralized Crowdfunding Platform
-
+![""](https://user-images.githubusercontent.com/74038190/212284100-561aa473-3905-4a80-b561-0d28506553ee.gif)
 A modern Web3 crowdfunding dApp built with **Next.js**, **Ethers.js**, and **Solidity**, enabling users to create fundraising campaigns and contribute to causes they believe in — all powered by **blockchain technology**.
 
-![Crowdfunding Animation](https://user-images.githubusercontent.com/74038190/213844263-a8897a51-32f4-4b3b-b5c2-e1528b89f6f3.gif)
+![""](https://user-images.githubusercontent.com/74038190/212284100-561aa473-3905-4a80-b561-0d28506553ee.gif)
 
 ---
 
@@ -10,7 +10,6 @@ A modern Web3 crowdfunding dApp built with **Next.js**, **Ethers.js**, and **Sol
 
 🚨 **This is a TESTNET application. DO NOT send real ETH!** Use **testnet ETH** only. All transactions are on a test blockchain and hold **no real monetary value**.
 
----
 
 ## ✨ Features
 
@@ -44,16 +43,13 @@ A modern Web3 crowdfunding dApp built with **Next.js**, **Ethers.js**, and **Sol
 ### 🚀 Deployment
 - ▲ **Vercel** – Hosting platform
 - 🦊 **MetaMask** – Wallet integration
-
-![Tech Stack Animation](https://user-images.githubusercontent.com/74038190/212257472-08e52665-c503-4bd9-aa20-f5a4dae769b5.gif)
-
 ---
 
 ## 🌐 Live Demo
 
 🖥️ **Frontend**: [crowd-spark-ten.vercel.app](https://crowd-spark-ten.vercel.app)
 
-![Demo Animation](https://user-images.githubusercontent.com/74038190/213760705-0d5bf320-4f43-4352-b025-95af54f0909e.gif)
+![""](https://user-images.githubusercontent.com/74038190/212284100-561aa473-3905-4a80-b561-0d28506553ee.gif)
 
 ---
 
@@ -69,7 +65,6 @@ A modern Web3 crowdfunding dApp built with **Next.js**, **Ethers.js**, and **Sol
 1. Install [MetaMask](https://metamask.io/) and create a wallet
 2. Add a testnet (e.g., Sepolia) when prompted
 
-![MetaMask Connection](https://user-images.githubusercontent.com/74038190/213760677-2b9ede22-181b-4744-9c5b-db9b69fa50d9.gif)
 
 #### 💵 Get Test ETH
 Use any of the faucets below:
@@ -184,8 +179,7 @@ Crowd-Spark/
 │   └── deploy.js
 └── README.md
 ```
-
-![Project Structure](https://user-images.githubusercontent.com/74038190/212284136-03988914-d899-44b4-b1d9-4eeccf656e44.gif)
+![""](https://user-images.githubusercontent.com/74038190/212284100-561aa473-3905-4a80-b561-0d28506553ee.gif)
 
 ---
 
@@ -238,3 +232,4 @@ MIT License
 Together we're building a decentralized future 🚀
 
 ![Thank You Animation](https://user-images.githubusercontent.com/74038190/213844263-a8897a51-32f4-4b3b-b5c2-e1528b89f6f3.gif)
+![""](https://user-images.githubusercontent.com/74038190/212284100-561aa473-3905-4a80-b561-0d28506553ee.gif)
