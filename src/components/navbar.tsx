@@ -7,7 +7,7 @@ import { usePathname, useRouter } from "next/navigation";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { connectWallet, isConnected } = useContractStore();
+  const { connectWallet, isConnected,addTestNet,correctChain } = useContractStore();
   const pathname = usePathname();
   const router = useRouter();
   const toggleMenu = () => {
@@ -80,8 +80,16 @@ const Navbar = () => {
                   : "bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold"
               }`}
               onClick={connectWallet}
+              disabled={!correctChain|| isConnected}
             >
               {isConnected ? "Connected" : "Connect Wallet"}
+            </Button>
+            <Button
+              size="sm"
+              className={`${correctChain?"hidden":""} bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold`}
+              onClick={addTestNet}
+            >
+              Add TestNet to Metamask
             </Button>
           </div>
 

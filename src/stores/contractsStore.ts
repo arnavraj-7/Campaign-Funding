@@ -2,6 +2,7 @@ import { CONTRACT_ABI, CONTRACT_ADDRESS } from "@/lib/abi";
 import { campaign, ProcessedCampaign } from "@/types";
 import axios from "axios";
 import { ethers } from "ethers";
+import toast from "react-hot-toast";
 import { Address } from "viem";
 import { create } from "zustand";
 
@@ -9,6 +10,7 @@ type contractStore = {
   contract: ethers.Contract | null;
   isLoading: boolean;
   isConnected: boolean;
+  correctChain : boolean;
   numberOfCampaigns: number;
   account: Address | null;
   isfetching: boolean;
@@ -19,6 +21,7 @@ type contractStore = {
   setAccount: (account: Address) => void;
   setContract: (contract: ethers.Contract) => void;
   connectWallet: () => Promise<void>;
+  addTestNet:()=>Promise<void>;
   createCampaign: (
     owner: string,
     title: string,
@@ -37,6 +40,7 @@ export const useContractStore = create<contractStore>((set, get) => ({
   isLoading: false,
   numberOfCampaigns:0,
   isConnected: false,
+  correctChain:false,
   account: null,
   allCampaigns: null,
   isfetching: true,
@@ -55,8 +59,9 @@ export const useContractStore = create<contractStore>((set, get) => ({
     set({ account: account });
   },
   connectWallet: async () => {
+    const {setIsLoading,correctChain}=get()
     try {
-      get().setIsLoading(true);
+      setIsLoading(true);
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const ethereum = (window as any).ethereum;
       if (typeof ethereum !== "undefined") {
@@ -73,17 +78,23 @@ export const useContractStore = create<contractStore>((set, get) => ({
           "Connected to network:",
           network.name,
           "Chain ID:",
-          network.chainId
+          parseInt(String(network.chainId)),"Expected Chain ID:",Number(process.env.NEXT_PUBLIC_CHAINID)
         );
-
+        set({correctChain:parseInt(String(network.chainId))==Number(process.env.NEXT_PUBLIC_CHAINID)});
         const contractInstance: ethers.Contract = new ethers.Contract(
           CONTRACT_ADDRESS,
           CONTRACT_ABI,
           signer
         );
-
+        
         // Test contract connection
         try {
+        if(!(parseInt(String(network.chainId))==Number(process.env.NEXT_PUBLIC_CHAINID))){
+          toast.error(
+            "You are not connected to the correct network. Please switch to Holešky network."
+          );
+          return;
+        }
           const code = await provider.getCode(CONTRACT_ADDRESS);
           if (code === "0x") {
             throw new Error("No contract deployed at this address");
@@ -92,8 +103,8 @@ export const useContractStore = create<contractStore>((set, get) => ({
           console.log("Contract code length:", code.length);
         } catch (err) {
           console.error("Contract verification failed:", err);
-          alert(
-            "Contract not found at the specified address. Please check your CONTRACT_ADDRESS."
+          toast.error(
+            "Contract not found at the specified address. Please check your network details."
           );
           return;
         }
@@ -114,7 +125,7 @@ export const useContractStore = create<contractStore>((set, get) => ({
 
         console.log("Connected:", accounts[0]);
       } else {
-        alert("Install MetaMask!");
+        toast.error("Install MetaMask!🦊");
       }
     } catch (error) {
       if (error instanceof Error) {
@@ -123,8 +134,32 @@ export const useContractStore = create<contractStore>((set, get) => ({
         console.error("Unexpected error:", error);
       }
     } finally {
-      get().setIsLoading(false);
+      setIsLoading(false);
     }
+  },
+  addTestNet: async () => {
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const ethereum = (window as any).ethereum;
+    await ethereum.request({
+      method: "wallet_addEthereumChain",
+      params: [
+        {
+          chainId: process.env.NEXT_PUBLIC_CHAINID,
+          chainName: "LocalHost Hardhat",
+          rpcUrls: [`${process.env.NEXT_PUBLIC_RPC}`],
+          nativeCurrency: {
+            name: "ETH",
+            symbol: "ETH",
+            decimals: 18,
+          },
+          blockExplorerUrls: [""],
+        },
+      ],
+    });
+  } catch (error) {
+    console.error("Error adding Polygon Amoy:", error);
+  }
   },
   createCampaign: async (
     owner: string,
