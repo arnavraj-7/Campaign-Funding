@@ -110,7 +110,7 @@ Use any of the faucets below:
 - MetaMask
 - Git
 
-![Development Setup](https://user-images.githubusercontent.com/74038190/212257468-1e9a91f1-b626-4baa-b15d-5c385dfa7c08.gif)
+![Development Setup](https://user-images.githubusercontent.com/74038190/212284158-e840e285-664b-44d7-b79b-e264b5e54825.gif)
 
 ### 📁 Setup Steps
 ```bash
@@ -170,9 +170,9 @@ Crowd-Spark/
 │   ├── create-campaign.js
 │   └── campaign/[id].js
 ├── components/
-│   ├── ui/
-│   ├── navbar.tsx
-│   └── footer.tsx
+│   ├── Header.js
+│   ├── CampaignCard.js
+│   └── DonationForm.js
 ├── utils/
 │   ├── web3.js
 │   └── pinata.js
