@@ -168,19 +168,19 @@ const CampaignDetail = () => {
   const isEnded = new Date(currentCampaign.deadlineDate) < new Date();
 
   return (
-    <motion.div
-     initial={{ opacity: 0, y: 30 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, ease: "easeOut" }}
-      className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 font-inter"
-    >
+   
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 font-inter">
       {/* Animated Background */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse"></div>
         <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-blue-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse delay-1000"></div>
       </div>
-
+ <motion.div
+     initial={ { opacity: 0, y: 40, scale: 0.98, }}
+          animate={{ opacity: 1, y: 0, scale: 1,  }}
+          transition={{ duration: 0.8, ease: "easeInOut" }}
+          exit={ { opacity: 0, y: -30, scale: 0.95, }}
+    >
       {/* Header */}
       <div className="relative overflow-hidden bg-gradient-to-r from-purple-600/10 to-blue-600/10 border-b border-white/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -362,7 +362,7 @@ const CampaignDetail = () => {
                     <p className="text-slate-400 font-inter">No supporters yet. Be the first to support this campaign!</p>
                   </div>
                 ) : (
-                  <div className="space-y-3 max-h-64 overflow-y-auto">
+                  <div className="space-y-3 max-h-64 overflow-y-auto custom-scrollbar">
                     {currentCampaign.donators.map((donator, index) => (
                       <div key={index} className="flex items-center gap-3 p-3 bg-slate-700/30 rounded-lg">
                         <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full flex items-center justify-center text-white font-bold text-sm">
@@ -383,8 +383,8 @@ const CampaignDetail = () => {
           </div>
         </div>
       </div>
-    </div>
     </motion.div>
+    </div>
   );
 };
 
