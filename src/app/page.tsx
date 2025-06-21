@@ -5,21 +5,22 @@ import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/ca
 import { Badge } from "@/components/ui/badge";
 import { ArrowDown, Zap, Shield, Clock, TrendingUp, Users, Coins, BookOpen, } from "lucide-react";
 import Link from "next/link";
+import { useContractStore } from "@/stores/contractsStore";
 
 
 
 const Index = () => {
   const [isVisible, setIsVisible] = useState(false);
-
+  const {numberOfCampaigns}= useContractStore();
   useEffect(() => {
     setIsVisible(true);
   }, []);
 
  
   const stats = [
-    { icon: TrendingUp, label: "Total Raised", value: "$2.4M", color: "text-green-400" },
-    { icon: Users, label: "Active Campaigns", value: "156", color: "text-blue-400" },
-    { icon: Shield, label: "Success Rate", value: "78%", color: "text-purple-400" },
+    { icon: TrendingUp, label: "Total Raised", value: "$43k", color: "text-green-400" },
+    { icon: Users, label: "Active Campaigns", value: numberOfCampaigns || 10, color: "text-blue-400" },
+    { icon: Shield, label: "Success Rate", value: "84%", color: "text-purple-400" },
   ];
 
   return (
