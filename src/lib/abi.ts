@@ -780,5 +780,5 @@ export const CONTRACT_ABI = [
       "type": "function"
     }
   ];
-export const CONTRACT_ADDRESS = "0x5FbDB2315678afecb367f032d93F642f64180aa3"; //local testnet
-// export const CONTRACT_ADDRESS = "0x358e51c3e8EC9b877cF5883215aa7B1bb6707775"; //actual deploy on testnet
+// export const CONTRACT_ADDRESS = "0x5FbDB2315678afecb367f032d93F642f64180aa3"; //local testnet
+export const CONTRACT_ADDRESS = "0x358e51c3e8EC9b877cF5883215aa7B1bb6707775"; //actual deploy on testnet
