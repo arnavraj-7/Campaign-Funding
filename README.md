@@ -160,24 +160,38 @@ await contract.donate(campaignId, { value });
 ## 🧱 Project Structure
 ```
 Crowd-Spark/
-├── pages/
-│   ├── index.js
-│   ├── create-campaign.js
-│   └── campaign/[id].js
-├── components/
-│   ├── Header.js
-│   ├── CampaignCard.js
-│   └── DonationForm.js
-├── utils/
-│   ├── web3.js
-│   └── pinata.js
-├── contracts/
-│   └── CrowdFunding.sol
-├── public/
-├── styles/
-├── scripts/
-│   └── deploy.js
-└── README.md
+├── artifacts/               # Compiled contract outputs
+│   └── build-info/
+├── contracts/               # Solidity smart contracts
+├── ignition/                # Hardhat Ignition module
+├── node_modules/            # Dependencies
+├── original_contract/       # Backup or prior version of contracts
+├── public/                  # Static assets
+├── src/
+│   ├── app/                 # Next.js app router
+│   │   ├── campaigns/
+│   │   │   ├── [campaign]/  # Individual campaign page
+│   │   │   │   └── page.tsx
+│   │   │   └── page.tsx     # All campaigns listing
+│   │   ├── create-campaign/
+│   │   │   └── page.tsx     # Create campaign form
+│   │   ├── layout.tsx       # Root layout
+│   │   └── globals.css      # Global styles
+│   ├── components/          # UI components (cards, navbar, etc.)
+│   ├── lib/
+│   │   ├── abi.ts           # Smart contract ABI
+│   │   └── utils.ts         # Helper functions
+│   ├── pages/               # (If used alongside app/)
+│   ├── stores/
+│   │   └── contractsStore.ts# Zustand store for contract interaction
+│   ├── types/               # TypeScript types
+│   └── utils/               # Shared utility functions
+├── .env.local               # Environment variables (not committed)
+├── hardhat.config.ts        # Hardhat config
+├── package.json             # Project metadata
+├── README.md                # Project documentation
+└── tsconfig.json            # TypeScript config
+
 ```
 ![""](https://user-images.githubusercontent.com/74038190/212284100-561aa473-3905-4a80-b561-0d28506553ee.gif)
 
