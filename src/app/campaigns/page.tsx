@@ -25,7 +25,7 @@ const tagIcons: Record<string, string> = {
   Technology: "💻",
   Environment: "🌱",
   Education: "📚",
-  "Health/": "🏥",
+  "Medical / Health": "🏥",
   "Arts & Culture": "🎨",
   "Startups / Business": "🚀",
   "Child Welfare": "👶",
@@ -79,10 +79,10 @@ const Campaigns = () => {
     return (parseFloat(donated) / parseFloat(target)) * 100;
   };
 
-  useEffect(() => {
-    console.log("called useEffect");
-    console.log("taggedCampaigns", taggedCampaigns);
-  }, [taggedCampaigns]);
+  // useEffect(() => {
+  //   console.log("called useEffect");
+  //   console.log("taggedCampaigns", taggedCampaigns);
+  // }, [taggedCampaigns]);
 
   const gettagColor = (tag?: string) => {
     const colors: Record<string, string> = {
@@ -220,7 +220,7 @@ const Campaigns = () => {
                   defaultValue={"All"} 
                   onChange={(e) => {
                     console.log(e.target.value, sortedCampaigns[e.target.value]);
-                    setTaggedCampaigns(sortedCampaigns[e.target.value.split(" ")[0]]);
+                    setTaggedCampaigns(sortedCampaigns[e.target.value]);
                     setTag(e.target.value);
                   }}
                 >
