@@ -7,10 +7,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Wallet, Plus, ArrowLeft, Upload, X, Eye } from "lucide-react";
 import { useContractStore } from '@/stores/contractsStore';
-import { uploadImageToPinata, uploadJSONToPinata } from '@/utils/pinataUploader';
 import toast from 'react-hot-toast';
 import { ethers } from 'ethers';
 import Image from 'next/image';
+import axios from 'axios';
 
 const tags = [
   { value: 'technology', label: 'Technology', icon: '💻', color: 'bg-blue-500/20 text-blue-400 border-blue-500/30' },
@@ -26,7 +26,8 @@ const tags = [
 ];
 
 const CreateCampaign = () => {
-  const { connectWallet, createCampaign, isConnected, isLoading, account ,contract} = useContractStore();
+  const { connectWallet, createCampaign, isConnected, account ,contract} = useContractStore();
+  const [isLoading,setisLoading] = useState(false);
   const [image, setImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string>('');
   const [selectedtag, setSelectedtag] = useState('');
@@ -56,21 +57,21 @@ const CreateCampaign = () => {
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
+    setisLoading(true);
     e.preventDefault();
     if (!account || !image || !selectedtag) return;
     
     try {
       const tagData = tags.find(cat => cat.value === selectedtag);
-      let data = {
+      const data = {
         name: formData.title,
         description: formData.description,
         tag: tagData?.label || '',
-        imageUrl: ""
       };
-      
-      const imageurl = await uploadImageToPinata(image, data);
-      data = { ...data, imageUrl: imageurl };
-      const metadata = await uploadJSONToPinata(data);
+      const form =new FormData();
+      form.append('file', image);
+      form.append('data', JSON.stringify(data));
+     const metadata : string= (await axios.post('/api/uploadmetadata', form)).data.data;
       
       await createCampaign(account, formData.title, metadata, formData.target, formData.deadline);
       
@@ -79,6 +80,7 @@ const CreateCampaign = () => {
       setImage(null);
       setImagePreview('');
       setSelectedtag('');
+      setisLoading(false);
     } catch (error) {
       console.error('Error creating campaign:', error);
     }
@@ -92,7 +94,7 @@ const CreateCampaign = () => {
       if(!contract) return;
       setCurrent(contract);
     }
-  },[isConnected])
+  },[isConnected,contract])
   useEffect(()=>{
 
      if(currentContract){
@@ -103,7 +105,7 @@ const CreateCampaign = () => {
     if(!currentContract) return;
     currentContract.removeListener("CampaignCreated",handleCreation);
    }
-  },[contract])
+  },[contract,currentContract])
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
@@ -120,7 +122,7 @@ const CreateCampaign = () => {
             <Link href="/">
             <Button 
               variant="ghost" 
-              className="text-slate-400 hover:text-white"
+              className="text-slate-400 hover:bg-transparent hover:underline hover:text-white"
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
               Back to Home
@@ -280,18 +282,18 @@ const CreateCampaign = () => {
                           type="button"
                           variant="outline"
                           onClick={() => document.getElementById('image-upload')?.click()}
-                          className="border-slate-600 text-slate-300 hover:bg-slate-700"
+                          className="border-slate-600 text-slate-300 hover:bg-purple-500 hover:border-purple-400 bg-zinc-800/50"
                         >
                           Choose Image
                         </Button>
                       </div>
                     ) : (
-                      <div className="relative">
+                      <div className="relative h-64">
                         <Image
                           src={imagePreview}
-                          fill={true}
+                            fill={true}
                           alt="Campaign preview"
-                          className="w-full h-64 object-cover rounded-lg border border-slate-600"
+                          className="w-full h-full object-cover rounded-lg border border-slate-600"
                         />
                         <Button
                           type="button"

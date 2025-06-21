@@ -6,14 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { ArrowDown, Zap, Shield, Clock, TrendingUp, Users, Coins, BookOpen, } from "lucide-react";
 import Link from "next/link";
 
-// Mock store - replace with your actual store
-const useContractStore = () => ({
-  connectWallet: async () => console.log('Connecting wallet...'),
-  isConnected: false,
-  isLoading: false,
-  account: null as string | null,
-  contract: null
-});
+
 
 const Index = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -22,13 +15,7 @@ const Index = () => {
     setIsVisible(true);
   }, []);
 
-  const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
+ 
   const stats = [
     { icon: TrendingUp, label: "Total Raised", value: "$2.4M", color: "text-green-400" },
     { icon: Users, label: "Active Campaigns", value: "156", color: "text-blue-400" },

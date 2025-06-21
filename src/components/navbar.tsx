@@ -3,21 +3,34 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Menu, X, Zap } from "lucide-react";
 import { useContractStore } from "@/stores/contractsStore";
+import { usePathname, useRouter } from "next/navigation";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { connectWallet,isConnected } = useContractStore();
-
+  const { connectWallet, isConnected,addTestNet,correctChain } = useContractStore();
+  const pathname = usePathname();
+  const router = useRouter();
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   const navItems = [
     { name: "Home", href: "/" },
-    { name: "Features", href: "/#features" },
-    { name: "Education", href: "/#education" },
-    { name: "About", href: "/#about" },
-    { name: "Contact", href: "#contact" },
+    { name: "Features", href: "features" },
+    { name: "Education", href: "education" },
+    { name: "About", href: "footer" },
+    { name: "Contact", href: "mailto:arnavrajcodes@gmail.com" },
   ];
 
   return (
@@ -35,21 +48,48 @@ const Navbar = () => {
           {/* Desktop Menu */}
           <div className="hidden md:flex items-center space-x-8">
             {navItems.map((item) => (
-              <a
+              <Button
+                variant={"link"}
                 key={item.name}
-                href={item.href}
-                className="text-slate-300 hover:text-purple-400 transition-colors duration-200 font-medium"
+                onClick={() => {
+                  if (item.href == "/") {
+                    if (pathname?.includes("#") || pathname == "/")
+                      scrollToTop();
+                    else {
+                      router.push("/");
+                    }
+                  }
+                  if (item.name == "Contact") router.push(`${item.href}`);
+                  if (pathname?.includes("#") || pathname == "/") {
+                    scrollToSection(`${item.href}`);
+                  }
+                  else if (item.href != "/") {
+                    router.push(`/#${item.href}`);
+                  }
+                }}
+                className="text-slate-300 hover:text-purple-400 transition-colors duration-200 font-medium my-0 mx-2"
               >
                 {item.name}
-              </a>
+              </Button>
             ))}
-            <Button 
+            <Button
               size="sm"
-              className={`${isConnected?"bg-gradient-to-r from-green-700 to-green-800 hover-from-green-800 hover-to-green-900 ":"bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold"}`}
+              className={`${
+                isConnected
+                  ? "bg-gradient-to-r from-green-700 to-green-800 hover-from-green-800 hover-to-green-900 "
+                  : "bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold"
+              }`}
               onClick={connectWallet}
+              disabled={!correctChain|| isConnected}
             >
-              
-              {isConnected? "Connected" :"Connect Wallet"}
+              {isConnected ? "Connected" : "Connect Wallet"}
+            </Button>
+            <Button
+              size="sm"
+              className={`${correctChain?"hidden":""} bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold`}
+              onClick={addTestNet}
+            >
+              Add TestNet to Metamask
             </Button>
           </div>
 
@@ -61,7 +101,11 @@ const Navbar = () => {
               onClick={toggleMenu}
               className="text-slate-300 hover:text-white hover:bg-slate-800"
             >
-              {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+              {isMenuOpen ? (
+                <X className="h-6 w-6" />
+              ) : (
+                <Menu className="h-6 w-6" />
+              )}
             </Button>
           </div>
         </div>
@@ -81,7 +125,7 @@ const Navbar = () => {
                 </a>
               ))}
               <div className="px-3 py-2">
-                <Button 
+                <Button
                   size="sm"
                   className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold"
                 >
