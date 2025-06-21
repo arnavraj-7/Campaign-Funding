@@ -122,7 +122,7 @@ const CreateCampaign = () => {
             <Link href="/">
             <Button 
               variant="ghost" 
-              className="text-slate-400 hover:text-white"
+              className="text-slate-400 hover:bg-transparent hover:underline hover:text-white"
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
               Back to Home
