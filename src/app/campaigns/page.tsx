@@ -24,8 +24,7 @@ const tagIcons: Record<string, string> = {
   Technology: "💻",
   Environment: "🌱",
   Education: "📚",
-  Health: "🏥",
-  Art: "🎨",
+  "Health/Medical": "🏥",
   "Arts & Culture": "🎨",
   "Startups / Business": "🚀",
   "Child Welfare": "👶",
@@ -209,7 +208,7 @@ const Campaigns = () => {
                   defaultValue={"All"} 
                   onChange={(e) => {
                     console.log(e.target.value, sortedCampaigns[e.target.value]);
-                    setTaggedCampaigns(sortedCampaigns[e.target.value.split(" ")[0]]);
+                    setTaggedCampaigns(sortedCampaigns[e.target.value]);
                     setTag(e.target.value);
                   }}
                 >

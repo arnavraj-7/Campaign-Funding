@@ -59,7 +59,7 @@ export const useContractStore = create<contractStore>((set, get) => ({
     set({ account: account });
   },
   connectWallet: async () => {
-    const {setIsLoading,correctChain}=get()
+    const {setIsLoading}=get()
     try {
       setIsLoading(true);
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -91,7 +91,7 @@ export const useContractStore = create<contractStore>((set, get) => ({
         try {
         if(!(parseInt(String(network.chainId))==Number(process.env.NEXT_PUBLIC_CHAINID))){
           toast.error(
-            "You are not connected to the correct network. Please switch to Holešky network."
+            "Please switch to Holešky network."
           );
           return;
         }
@@ -319,7 +319,7 @@ export const useContractStore = create<contractStore>((set, get) => ({
       }
 
       const allCampaigns = await contract.getAllCampaigns();
-      console.log("All campaigns raw data received");
+      console.log("All campaigns raw data received",allCampaigns);
 
       // Process the campaigns data and convert BigInt to string
       let processedCampaigns = allCampaigns.map(
@@ -375,6 +375,6 @@ export const useContractStore = create<contractStore>((set, get) => ({
       {}
     );
     set({ sortedCampaigns: sorted });
-    console.log("Sorted campaigns successfully", sorted);
+    // console.log("Sorted campaigns successfully", sorted);
   },
 }));
