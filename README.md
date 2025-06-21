@@ -2,7 +2,7 @@
 
 A modern Web3 crowdfunding dApp built with **Next.js**, **Ethers.js**, and **Solidity**, enabling users to create fundraising campaigns and contribute to causes they believe in — all powered by **blockchain technology**.
 
-![Crowdfunding Animation](https://media.giphy.com/media/SsTcO55LJDBcMEucfp/giphy.gif)
+![Crowdfunding Animation](https://user-images.githubusercontent.com/74038190/213844263-a8897a51-32f4-4b3b-b5c2-e1528b89f6f3.gif)
 
 ---
 
@@ -20,6 +20,8 @@ A modern Web3 crowdfunding dApp built with **Next.js**, **Ethers.js**, and **Sol
 - 📈 **Live Campaign Progress** — Real-time tracking of donations
 - 🔐 **Blockchain Security** — All data & funds are protected by smart contracts
 - 📱 **Responsive UI** — Fully optimized for desktop and mobile
+
+![Features Demo](https://user-images.githubusercontent.com/74038190/212284158-e840e285-664b-44d7-b79b-e264b5e54825.gif)
 
 ---
 
@@ -43,13 +45,15 @@ A modern Web3 crowdfunding dApp built with **Next.js**, **Ethers.js**, and **Sol
 - ▲ **Vercel** – Hosting platform
 - 🦊 **MetaMask** – Wallet integration
 
+![Tech Stack Animation](https://user-images.githubusercontent.com/74038190/212257472-08e52665-c503-4bd9-aa20-f5a4dae769b5.gif)
+
 ---
 
 ## 🌐 Live Demo
 
 🖥️ **Frontend**: [crowd-spark-ten.vercel.app](https://crowd-spark-ten.vercel.app)
 
-![Demo Animation](https://media.giphy.com/media/KzJkzjggfGN5Py6nkT/giphy.gif)
+![Demo Animation](https://user-images.githubusercontent.com/74038190/213760705-0d5bf320-4f43-4352-b025-95af54f0909e.gif)
 
 ---
 
@@ -59,9 +63,13 @@ A modern Web3 crowdfunding dApp built with **Next.js**, **Ethers.js**, and **Sol
 
 🔗 Visit: [crowd-spark-ten.vercel.app](https://crowd-spark-ten.vercel.app)
 
+![Getting Started](https://user-images.githubusercontent.com/74038190/212284087-bbe7e430-757e-4901-90bf-4cd2ce3e1852.gif)
+
 #### 🦊 MetaMask Setup
 1. Install [MetaMask](https://metamask.io/) and create a wallet
 2. Add a testnet (e.g., Sepolia) when prompted
+
+![MetaMask Connection](https://user-images.githubusercontent.com/74038190/213760677-2b9ede22-181b-4744-9c5b-db9b69fa50d9.gif)
 
 #### 💵 Get Test ETH
 Use any of the faucets below:
@@ -71,16 +79,22 @@ Use any of the faucets below:
 - 🌐 [Chainlink Faucet](https://faucets.chain.link/)
 - 🌐 [QuickNode Faucet](https://faucet.quicknode.com/)
 
+![Faucet Process](https://user-images.githubusercontent.com/74038190/212284100-561aa473-3905-4a80-b561-0d28506553ee.gif)
+
 #### 📣 Create a Campaign
 1. Connect your wallet
 2. Go to **Create Campaign**
 3. Add title, description, image, tag, target & deadline
 4. Confirm transaction in MetaMask
 
+![Create Campaign](https://user-images.githubusercontent.com/74038190/213760671-4b015894-4ba8-434b-834b-93e95d9074c4.gif)
+
 #### 💸 Donate to Campaigns
 1. Browse live campaigns
 2. Enter donation amount
 3. Confirm in MetaMask
+
+![Donation Process](https://user-images.githubusercontent.com/74038190/212284094-e50d1b31-5c85-4ca4-a1ee-8a8dc5d0a9aa.gif)
 
 #### 🧾 Manage Campaigns
 - Track your campaigns
@@ -95,6 +109,8 @@ Use any of the faucets below:
 - Node.js v16+
 - MetaMask
 - Git
+
+![Development Setup](https://user-images.githubusercontent.com/74038190/212257468-1e9a91f1-b626-4baa-b15d-5c385dfa7c08.gif)
 
 ### 📁 Setup Steps
 ```bash
@@ -112,6 +128,8 @@ PRIVATE_KEY=your_wallet_private_key
 NEXT_PUBLIC_RPC=your_testnet_rpc_url
 NEXT_PUBLIC_CHAINID=your_testnet_chain_id
 ```
+
+![Environment Setup](https://user-images.githubusercontent.com/74038190/212284115-f47cd8ff-2ffb-4b09-b72a-8ae1c4f4f72e.gif)
 
 ### 🚀 Run Locally
 ```bash
@@ -140,6 +158,8 @@ await contract.createCampaign(...);
 await contract.donate(campaignId, { value });
 ```
 
+![Smart Contracts](https://user-images.githubusercontent.com/74038190/213760697-45ae6491-2060-45c0-8310-8f4cfeb24c17.gif)
+
 ---
 
 ## 🧱 Project Structure
@@ -165,6 +185,8 @@ Crowd-Spark/
 └── README.md
 ```
 
+![Project Structure](https://user-images.githubusercontent.com/74038190/212284136-03988914-d899-44b4-b1d9-4eeccf656e44.gif)
+
 ---
 
 ## 🧠 Development Challenges
@@ -184,6 +206,8 @@ Crowd-Spark/
 ### 🪢 Async Transaction Handling
 - ✅ Added proper error handling + loading states
 
+![Challenges Overcome](https://user-images.githubusercontent.com/74038190/212284158-e840e285-664b-44d7-b79b-e264b5e54825.gif)
+
 ---
 
 ## 🤝 Contributing
@@ -192,6 +216,8 @@ Crowd-Spark/
 2. Create a feature branch
 3. Commit and push
 4. Open a Pull Request on GitHub
+
+![Contributing](https://user-images.githubusercontent.com/74038190/213760703-be3c06c5-20b9-4fa2-8a0d-64de4b9b66bc.gif)
 
 ---
 
@@ -203,10 +229,12 @@ MIT License
 ## 💌 Contact
 ✉️ **Email**: arnavrajcodes@gmail.com
 
+![Contact](https://user-images.githubusercontent.com/74038190/212284158-e840e285-664b-44d7-b79b-e264b5e54825.gif)
+
 ---
 
 ## ⚡ Happy Crowdfunding!
 
-Together we’re building a decentralized future 🚀
+Together we're building a decentralized future 🚀
 
-![Thank You Animation](https://media.giphy.com/media/26AHONQ79FdWZhAI0/giphy.gif)
+![Thank You Animation](https://user-images.githubusercontent.com/74038190/213844263-a8897a51-32f4-4b3b-b5c2-e1528b89f6f3.gif)
