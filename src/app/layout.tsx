@@ -48,6 +48,7 @@ const {isConnected, connectWallet} = useContractStore();
   return (
     <html lang="en">
       <head>
+        <link rel="icon" href="/lightning.png" sizes="any" />
         <title>Crowd-Spark</title>
       </head>
       <body>
