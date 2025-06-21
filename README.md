@@ -170,9 +170,9 @@ Crowd-Spark/
 │   ├── create-campaign.js
 │   └── campaign/[id].js
 ├── components/
-│   ├── Header.js
-│   ├── CampaignCard.js
-│   └── DonationForm.js
+│   ├── ui/
+│   ├── navbar.tsx
+│   └── footer.tsx
 ├── utils/
 │   ├── web3.js
 │   └── pinata.js
