@@ -20,6 +20,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import {motion} from "framer-motion"
 import {
   ArrowLeft,
   Clock,
@@ -167,6 +168,12 @@ const CampaignDetail = () => {
   const isEnded = new Date(currentCampaign.deadlineDate) < new Date();
 
   return (
+    <motion.div
+     initial={{ opacity: 0, y: 30 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6, ease: "easeOut" }}
+      className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 font-inter"
+    >
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 font-inter">
       {/* Animated Background */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
@@ -377,6 +384,7 @@ const CampaignDetail = () => {
         </div>
       </div>
     </div>
+    </motion.div>
   );
 };
 
