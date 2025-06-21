@@ -2,6 +2,8 @@
 
 A modern Web3 crowdfunding dApp built with **Next.js**, **Ethers.js**, and **Solidity**, enabling users to create fundraising campaigns and contribute to causes they believe in — all powered by **blockchain technology**.
 
+![Crowdfunding Animation](https://media.giphy.com/media/SsTcO55LJDBcMEucfp/giphy.gif)
+
 ---
 
 ## ⚠️ IMPORTANT NOTICE
@@ -24,28 +26,30 @@ A modern Web3 crowdfunding dApp built with **Next.js**, **Ethers.js**, and **Sol
 ## 🛠️ Tech Stack
 
 ### 🧑‍💻 Frontend
-- **Next.js** – React-based framework
-- **Zustand** – Lightweight state management
-- **Ethers.js** – Ethereum interaction
-- **Tailwind CSS** – Styling and layout
-- **TypeScript/JavaScript** – Core logic
+- ⚛️ **Next.js** – React-based framework
+- 🧠 **Zustand** – Lightweight state management
+- 🧪 **Ethers.js** – Ethereum interaction
+- 🎨 **Tailwind CSS** – Styling and layout
+- 🧾 **TypeScript/JavaScript** – Core logic
 
 ### 🔗 Blockchain & Backend
-- **Solidity** – Smart contract language
-- **Hardhat** – Smart contract development tool
-- **Pinata + IPFS** – Decentralized file hosting
-- **Ethereum Testnet** – Blockchain deployment
-- **Ankr RPC Provider** – [Ankr RPC](https://www.ankr.com/rpc/projects/?projectId=5ae64678cd8723fa659a9b1e96628188e66d4c5c2eb28b97bde6e1befb42012d) used for connecting to the blockchain
+- 💻 **Solidity** – Smart contract language
+- 🛠️ **Hardhat** – Smart contract development tool
+- 📦 **Pinata + IPFS** – Decentralized file hosting
+- 🧪 **Ethereum Testnet** – Blockchain deployment
+- 🌐 **Ankr RPC Provider** – [Ankr RPC](https://www.ankr.com/rpc/projects/?projectId=5ae64678cd8723fa659a9b1e96628188e66d4c5c2eb28b97bde6e1befb42012d)
 
 ### 🚀 Deployment
-- **Vercel** – Hosting platform
-- **MetaMask** – Wallet integration
+- ▲ **Vercel** – Hosting platform
+- 🦊 **MetaMask** – Wallet integration
 
 ---
 
 ## 🌐 Live Demo
 
 🖥️ **Frontend**: [crowd-spark-ten.vercel.app](https://crowd-spark-ten.vercel.app)
+
+![Demo Animation](https://media.giphy.com/media/KzJkzjggfGN5Py6nkT/giphy.gif)
 
 ---
 
@@ -166,19 +170,19 @@ Crowd-Spark/
 ## 🧠 Development Challenges
 
 ### 🌊 Faucet Limitations
-- Solved by listing multiple faucet sources
+- ✅ Solved by listing multiple faucet sources
 
 ### ⚔️ Web3 Compatibility in Next.js
-- Resolved SSR issues by isolating Ethers.js usage
+- ✅ Resolved SSR issues by isolating Ethers.js usage
 
 ### 🔐 Contract Deployment
-- Tested locally using Hardhat before deploying
+- ✅ Tested locally using Hardhat before deploying
 
 ### 🧵 MetaMask Handling
-- Built solid wallet connection with automatic testnet switching
+- ✅ Built solid wallet connection with automatic testnet switching
 
 ### 🪢 Async Transaction Handling
-- Added proper error handling + loading states
+- ✅ Added proper error handling + loading states
 
 ---
 
@@ -202,4 +206,7 @@ MIT License
 ---
 
 ## ⚡ Happy Crowdfunding!
+
 Together we’re building a decentralized future 🚀
+
+![Thank You Animation](https://media.giphy.com/media/26AHONQ79FdWZhAI0/giphy.gif)
