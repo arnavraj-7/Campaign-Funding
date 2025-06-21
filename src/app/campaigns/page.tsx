@@ -19,12 +19,13 @@ import type { ProcessedCampaign } from "@/types/index.ts";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import {motion} from "framer-motion"
 
 const tagIcons: Record<string, string> = {
   Technology: "💻",
   Environment: "🌱",
   Education: "📚",
-  "Health/Medical": "🏥",
+  "Health/": "🏥",
   "Arts & Culture": "🎨",
   "Startups / Business": "🚀",
   "Child Welfare": "👶",
@@ -116,6 +117,7 @@ const Campaigns = () => {
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse"></div>
         <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-blue-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse delay-1000"></div>
       </div>
+      
       {!isConnected &&(
                 <Card className="bg-slate-800/50 backdrop-blur-sm border-slate-700 max-w-md mx-auto">
                   <CardHeader className="text-center">
@@ -140,6 +142,16 @@ const Campaigns = () => {
                 )}
 
       {/* Header */}
+      <motion.div
+      
+       initial={ { opacity: 0, y: 40, scale: 0.98, }}
+          animate={{ opacity: 1, y: 0, scale: 1,  }}
+          transition={{ duration: 0.5 }}
+          exit={ { opacity: 0, y: -30, scale: 0.95, }}
+          
+      >
+
+     
       <div className="relative overflow-hidden bg-gradient-to-r from-purple-600/10 to-blue-600/10 border-b border-white/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="flex items-center justify-between mb-6">
@@ -208,7 +220,7 @@ const Campaigns = () => {
                   defaultValue={"All"} 
                   onChange={(e) => {
                     console.log(e.target.value, sortedCampaigns[e.target.value]);
-                    setTaggedCampaigns(sortedCampaigns[e.target.value]);
+                    setTaggedCampaigns(sortedCampaigns[e.target.value.split(" ")[0]]);
                     setTag(e.target.value);
                   }}
                 >
@@ -350,6 +362,7 @@ const Campaigns = () => {
           </div>
         )}
       </div>
+    </motion.div>
     </div>
   );
 };
